@@ -1,15 +1,23 @@
 /** App entry point. */
-
+import Logic from './modules/logic';
+import Renderer from './modules/renderer';
+import ControlSurface from './modules/control_surface';
 
 class App {
   constructor() {
     // init
-    this.scene = new Scene();
-    this.renderer = new Renderer(this.scene.scene, this.scene.camera);
-    
+    this.logic = new Logic();
+    this.renderer = new Renderer(this);
+    this.controlSurface = new ControlSurface(this);
+
+    // timing
+    this.time = {
+      now: performance.now(),
+      maxDelta: 0.1
+    };
+
     // run
     this.active = true;
-    this.now = performance.now();
     this.loop();
   }
 
@@ -17,12 +25,10 @@ class App {
     requestAnimationFrame(() => { this.loop(); });
     if (this.active) {
       const t = performance.now();
-      const delta = Math.min(this.maxTimeDelta, (t - this.now) / 1000);
-      this.now = t;
-      this.scene.update(delta);
-      this.surface.update(delta);
-      this.renderer.draw(delta);
-      this.surface.draw();
+      const delta = Math.min(this.time.maxDelta, (t - this.time.now) / 1000);
+      this.time.now = t;
+      this.logic.update(delta);
+      this.renderer.render(delta);
     }
   }
 }
