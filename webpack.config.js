@@ -2,12 +2,13 @@ var path = require('path');
 var webpack = require('webpack');
 
 // modules
-var MiniCssExtractPlugin = require("mini-css-extract-plugin");
-var UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-var OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+var MiniCssExtract = require("mini-css-extract-plugin");
+var UglifyJs = require("uglifyjs-webpack-plugin");
+var TerserJs = require("terser-webpack-plugin");
+var OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
 
 // path
-var appName = 'CBZ';
+var appName = 'clouds';
 var pathJS = './js/main.js';
 var pathSCSS = './scss/main.js';
 var pathOutput = 'build';
@@ -29,13 +30,10 @@ module.exports = [{
     },
     optimization: {
       minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          uglifyOptions: {compress: false, ecma: 6, mangle: true, output: {comments: false}},
-          sourceMap: true
-        })
-      ]
+        new TerserJs({
+          test: /\.js(\?.*)?$/i,
+        }),
+      ],
     },
     stats: {colors: true, warnings: false}
   },{
@@ -48,7 +46,7 @@ module.exports = [{
       rules: [{
         test: /\.scss$/,
         use: [
-          MiniCssExtractPlugin.loader, {
+          MiniCssExtract.loader, {
             loader: 'css-loader',
             options: {importLoaders: 2, sourceMap: true}
           }, {
@@ -66,14 +64,14 @@ module.exports = [{
     },
     optimization: {
       minimizer: [
-        new UglifyJsPlugin({
+        new UglifyJs({
           cache: true,
           parallel: true,
           sourceMap: true
         }),
-        new OptimizeCSSAssetsPlugin({})
+        new OptimizeCSSAssets({})
       ]
     },
-    plugins: [new MiniCssExtractPlugin({filename: './style.css', allChunks: true})]
+    plugins: [new MiniCssExtract({filename: './style.min.css', allChunks: true})]
   }
 ];

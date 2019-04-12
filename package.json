@@ -1,5 +1,5 @@
 {
-  "name": "cubez",
+  "name": "clouds",
   "version": "1.0.0",
   "main": "js/main.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "postcss-loader": "^2.1.6",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
+    "terser-webpack-plugin": "^1.2.3",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",
@@ -27,11 +28,11 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/meatbags/cubez.git"
+    "url": "git+https://github.com/meatbags/clouds.git"
   },
   "bugs": {
-    "url": "https://github.com/meatbags/cubez/issues"
+    "url": "https://github.com/meatbags/clouds/issues"
   },
-  "homepage": "https://github.com/meatbags/cubez#readme",
+  "homepage": "https://github.com/meatbags/clouds#readme",
   "description": ""
 }
