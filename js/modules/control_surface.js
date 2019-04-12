@@ -1,4 +1,4 @@
-/** Control surface and player interface. Handles user input. */
+/** Control surface/ user interface. */
 
 import Mouse from '../ui/mouse';
 import Keyboard from '../ui/keyboard';
@@ -27,8 +27,7 @@ class ControlSurface {
   }
 
   processTouch(e) {
-    var x = 0;
-    var y = 0;
+    let x = 0, y = 0;
     if (e.targetTouches && e.targetTouches.length) {
       const rect = this.domElement.getBoundingClientRect();
       const touch = e.targetTouches[0];

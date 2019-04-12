@@ -1,4 +1,5 @@
-/** App entry point. */
+/** App init and main loop. */
+
 import Logic from './modules/logic';
 import Renderer from './modules/renderer';
 import ControlSurface from './modules/control_surface';

@@ -1,4 +1,5 @@
 /** Game logic. */
+
 import Player from './player';
 import Camera from './camera';
 

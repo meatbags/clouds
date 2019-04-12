@@ -1,6 +1,4 @@
-/**
- ** Handle user input and move/ rotate player position.
- **/
+/** Player logic. */
 
 import { Blend, MinAngleBetween } from '../utils/maths';
 

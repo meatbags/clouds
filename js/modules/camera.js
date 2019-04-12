@@ -1,6 +1,4 @@
-/**
- ** Perspective first-person camera which tracks player.
- **/
+/** First-person camera. */
 
 class Camera {
   constructor(root) {

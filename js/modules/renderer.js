@@ -1,4 +1,5 @@
-/** WebGL Renderer */
+/** Three.js/ webgl renderer. */
+
 import '../lib/glsl';
 
 class Renderer {
