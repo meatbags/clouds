@@ -38,7 +38,7 @@ class World {
   update(delta) {
     this.cloudMat.uniforms.uTime.value += delta;
     this.cloudPlane.position.copy(this.root.camera.camera.position);
-    this.cloudPlane.position.y -= 50;
+    this.cloudPlane.position.y = -50;
   }
 }
 

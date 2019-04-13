@@ -23,8 +23,8 @@ class Player {
       system: this.root.colliderSystem,
       position: this.target.position,
       motion: this.motion,
-      gravity: 20,
-      floor: -1,
+      gravity: 18,
+      floor: -10,
     });
 
     // physical attributes
