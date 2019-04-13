@@ -1,6 +1,7 @@
 /** Three.js/ webgl renderer. */
 
 import '../lib/glsl';
+import Config from '../config';
 
 class Renderer {
   constructor(root) {
@@ -12,8 +13,8 @@ class Renderer {
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
     this.renderer.gammaFactor = 2;
-    this.width = 800;
-    this.height = 600;
+    this.width = Config.width;
+    this.height = Config.height;
     this.size = new THREE.Vector2(this.width, this.height);
 
     // render passes
@@ -37,8 +38,8 @@ class Renderer {
   }
 
   resize() {
-    this.width = 800;
-    this.height = 600;
+    this.width = Config.width;
+    this.height = Config.height;
     this.size.x = this.width;
     this.size.y = this.height;
     this.renderer.setSize(this.width, this.height);

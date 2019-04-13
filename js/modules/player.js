@@ -9,7 +9,7 @@ class Player {
     this.root = root;
 
     // set position
-    this.position = new THREE.Vector3(0, 10, 0);
+    this.position = new THREE.Vector3(0, 1, 0);
     this.rotation = new THREE.Vector2();
     this.motion = new THREE.Vector3();
     this.target = {
@@ -35,8 +35,8 @@ class Player {
     this.falling = false;
     this.fallTime = 0;
     this.fallTimeThreshold = 0.2;
-    this.minPitch = Math.PI * -0.125;
-    this.maxPitch = Math.PI * 0.125;
+    this.minPitch = Math.PI * -0.15;
+    this.maxPitch = Math.PI * 0.15;
     this.adjust = {slow: 0.05, normal: 0.1, fast: 0.125, maximum: 0.3};
     this.noclip = false;
 

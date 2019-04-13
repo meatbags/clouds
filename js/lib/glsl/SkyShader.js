@@ -159,9 +159,8 @@ THREE.Sky.SkyShader = {
 		'const float whiteScale = 1.0748724675633854;', // 1.0 / Uncharted2Tonemap(1000.0)
 
 		'vec3 Uncharted2Tonemap( vec3 x ) {',
-		'	return ( ( x * ( A * x + C * B ) + D * E ) / ( x * ( A * x + B ) + D * F ) ) - E / F;',
+		'	return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;',
 		'}',
-
 
 		'void main() {',
 		// optical length
@@ -184,7 +183,7 @@ THREE.Sky.SkyShader = {
 		'	vec3 betaMTheta = vBetaM * mPhase;',
 
 		'	vec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );',
-		'	Lin *= mix(vec3(1.0), pow(vSunE * ((betaRTheta + betaMTheta) / (vBetaR + vBetaM)) * Fex, vec3(1.0 / 2.0)), clamp(pow(1.0 - dot(up, vSunDirection), 5.0), 0.0, 1.0));',
+		'	Lin *= mix(vec3(1.0), pow(vSunE * ((betaRTheta + betaMTheta) / (vBetaR + vBetaM)) * Fex, vec3(1.0 / 2.0)), clamp(pow(1.0 - 10.0 * dot(up, vSunDirection), 5.0), 0.0, 1.0));',
 
 		// nightsky
 		'	vec3 direction = normalize( vWorldPosition - cameraPos );',
@@ -198,12 +197,13 @@ THREE.Sky.SkyShader = {
 		//'	L0 += ( vSunE * 19000.0 * Fex ) * sundisk;',
 
 		//'	vec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );',
-		'	vec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );',
+    //'	vec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );',
+		'	vec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.001 );',
 
 		'	vec3 curr = Uncharted2Tonemap( ( log2( 2.0 / pow( luminance, 4.0 ) ) ) * texColor );',
-		'	vec3 color = curr * whiteScale;',
-		'	vec3 retColor = pow( color, vec3( 1.0 / ( 1.2 + ( 1.2 * vSunfade ) ) ) );',
-		
+    //'	vec3 color = curr; * whiteScale;',
+		'	vec3 retColor = pow( curr * 0.9, vec3( 1.0 / ( 1.2 + ( 1.2 * vSunfade ) ) ) );',
+
 		'	gl_FragColor = vec4( retColor, 1.0 );',
 		'}'
 	].join( '\n' )
