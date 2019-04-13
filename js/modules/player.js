@@ -1,4 +1,6 @@
-/** Player logic. */
+/**
+ ** Handle user input and move/ rotate player position.
+ **/
 
 import { Blend, MinAngleBetween } from '../utils/maths';
 
@@ -13,12 +15,16 @@ class Player {
     this.target = {
       position: this.position.clone(),
       rotation: this.rotation.clone(),
-      motion: this.motion.clone()
+      motion: this.motion.clone(),
     };
 
-    // physics
-    this.collider = new Collider.Collider(this.target.position, this.motion);
-    this.collider.setPhysics({gravity: 20});
+    // bind collision system
+    this.collider = new Collider.Point({
+      system: this.root.colliderSystem,
+      position: this.target.position,
+      motion: this.motion,
+      gravity: 20,
+    });
 
     // physical attributes
     this.speed = 6;
@@ -98,7 +104,7 @@ class Player {
     if (!this.keys.disabled) {
       this.move(delta);
       if (!this.noclip) {
-        this.collider.move(delta, this.root.collider);
+        this.collider.collide(delta);
       } else {
         this.target.position.x += this.motion.x * delta;
         this.target.position.y += this.motion.y * delta;
