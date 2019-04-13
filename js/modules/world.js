@@ -8,11 +8,11 @@ class World {
     this.root = root;
     this.scene = root.scene;
 
-    // temp
+    // clouds
     this.cloudMat = CloudMaterial;
     this.cloudMat.transparent = true;
-    this.cloudMat.useLights = false;
-    this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(3000, 4000), this.cloudMat);
+    this.cloudMat.uniforms.uTime.value = Math.random() * 60;
+    this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMat);
     this.cloudPlane.rotation.x = -Math.PI / 2;
     this.scene.add(this.cloudPlane);
 
@@ -35,7 +35,7 @@ class World {
   }
 
   update(delta) {
-    this.cloudMat.uniforms.time.value += delta;
+    this.cloudMat.uniforms.uTime.value += delta;
     this.cloudPlane.position.copy(this.root.camera.camera.position);
     this.cloudPlane.position.y -= 50;
   }

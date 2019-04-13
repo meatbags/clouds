@@ -24,6 +24,7 @@ class Player {
       position: this.target.position,
       motion: this.motion,
       gravity: 20,
+      floor: -1,
     });
 
     // physical attributes
