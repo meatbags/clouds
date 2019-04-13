@@ -17,7 +17,6 @@ html, body {
 
 #canvas-target {
   cursor: crosshair;
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
   display: -ms-flexbox;
   display: flex;
   outline: 1px solid black; }

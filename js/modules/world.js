@@ -16,10 +16,11 @@ class World {
     this.cloudPlane.rotation.x = -Math.PI / 2;
     this.scene.add(this.cloudPlane);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.05);
-    const point = new THREE.PointLight(0xffffff, 1, 50, 2);
-    point.position.y = 10;
-    this.scene.add(ambient, point);
+    const directional = new THREE.DirectionalLight(0xffffff, 0.5);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.1);
+    directional.position.set(0, 0, 0);
+    directional.target.position.set(0, -0.25, 1);
+    this.scene.add(ambient, directional, directional.target);
 
     // sky
     this.sky = new THREE.Sky();
