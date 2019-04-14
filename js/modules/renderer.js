@@ -12,9 +12,9 @@ class Renderer {
     this.renderer.setClearColor(0x0, 1);
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
-    this.renderer.gammaFactor = 2;
-    this.width = Config.width;
-    this.height = Config.height;
+    this.renderer.gammaFactor = 2.5;
+    this.width = Math.floor(Config.width / 100 * window.innerWidth);
+    this.height = Math.floor(Config.height / 100 * window.innerHeight);
     this.size = new THREE.Vector2(this.width, this.height);
 
     // render passes
@@ -34,12 +34,13 @@ class Renderer {
 
     // add to dom
     this.resize();
+    window.addEventListener('resize', () => { this.resize(); });
     document.querySelector('#canvas-target').appendChild(this.renderer.domElement);
   }
 
   resize() {
-    this.width = Config.width;
-    this.height = Config.height;
+    this.width = Math.floor(Config.width / 100 * window.innerWidth);
+    this.height = Math.floor(Config.height / 100 * window.innerHeight);
     this.size.x = this.width;
     this.size.y = this.height;
     this.renderer.setSize(this.width, this.height);

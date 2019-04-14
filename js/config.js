@@ -1,8 +1,8 @@
 /** Global config. */
 
 const Config = {
-  width: 1000,
-  height: 750,
+  width: 100,
+  height: 75,
 };
 
 export default Config;

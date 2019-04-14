@@ -1,5 +1,7 @@
 /** First-person camera. */
 
+import Config from '../config';
+
 class Camera {
   constructor(root) {
     this.root = root;
@@ -8,15 +10,19 @@ class Camera {
     this.height = root.player.height;
     //this.target = new THREE.Vector3();
     this.fov = 65;
-    this.aspectRatio = this.root.width / this.root.height;
+    this.aspectRatio = 1.0;
     this.offset = 0.1;
     this.camera = new THREE.PerspectiveCamera(this.fov, this.aspectRatio, 0.1, 2000000);
     this.camera.up = new THREE.Vector3(0, 1, 0);
     this.camera.rotation.order = 'YXZ';
+    this.resize();
+    window.addEventListener('resize', () => { this.resize(); });
   }
 
-  resize(w, h) {
-    this.aspectRatio = this.root.width / this.root.height;
+  resize() {
+    const w = Math.floor(Config.width / 100 * window.innerWidth);
+    const h = Math.floor(Config.height / 100 * window.innerHeight);
+    this.aspectRatio = w / h;
     this.camera.aspect = this.aspectRatio;
     this.camera.updateProjectionMatrix();
   }

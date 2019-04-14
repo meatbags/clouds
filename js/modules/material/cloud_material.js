@@ -3,7 +3,7 @@
 const CloudMaterial = new THREE.ShaderMaterial({
 	uniforms: {
   	uTime: { value: 1.0 },
-    uDetailLevel: { value: 1.0 }, // 1, 2, 3
+    uDetailLevel: { value: 2.0 }, // 1, 2, 3
 	},
 	vertexShader: `
     varying vec2 vUV;
@@ -122,8 +122,9 @@ const CloudMaterial = new THREE.ShaderMaterial({
       float light = dot(norm, vec3(0.0, 1.0, 0.0)) - 0.5;
 
       // result
+			vec3 prussian = vec3(0.0, 0.192, 0.325);
       float alpha = 1.0 - min(1.0, sqrt(pow(0.5 - vUV.x, 2.0) + pow(0.5 - vUV.y, 2.0)) / 0.5);
-      gl_FragColor = vec4(colour + light * 0.5, colour.x * alpha);
+      gl_FragColor = vec4(colour + prussian + light * 0.5, colour.x * alpha);
     }
   `
 });

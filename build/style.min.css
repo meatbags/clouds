@@ -5,9 +5,13 @@ html, body {
   margin: 0;
   padding: 0; }
 
+body {
+  width: 100%;
+  height: 100vh; }
+
 .wrapper {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: center;
@@ -18,6 +22,8 @@ html, body {
 #canvas-target {
   cursor: crosshair;
   display: -ms-flexbox;
-  display: flex;
-  outline: 1px solid black; }
+  display: flex; }
+  #canvas-target canvas {
+    margin: 0;
+    padding: 0; }
 

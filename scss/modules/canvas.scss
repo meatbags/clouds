@@ -1,5 +1,9 @@
 #canvas-target {
   cursor: crosshair;
   display: flex;
-  outline: 1px solid black;
+
+  canvas {
+    margin: 0;
+    padding: 0;
+  }
 }
