@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cumulonimbus</title>
+    <title>title</title>
 	  <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <script type='text/javascript' src='lib/three.min.js'></script>
     <script type='text/javascript' src='lib/collider.min.js'></script>
     <script type='text/javascript' src='app.min.js'></script>
     <link rel='stylesheet' href='style.min.css'>
+    <style type='text/css'>
+      @font-face {
+        font-family: 'PlayfairDisplay';
+        src: url('fonts/PlayfairDisplay-Regular.ttf') format('truetype');
+      }
+    </style>
   </head>
   <body>
     <div class='wrapper'>
-      <div id='canvas-target'></div>
+      <div class='wrapper__inner'>
+        <canvas id='canvas-target'>Your browser does not support HTML5 Canvas.</canvas>
+        <canvas id='canvas-target-2d'></canvas>
+        <div id='menu-button' class='menu-button'>
+          <div class='menu-button__inner'>
+            <div class='menu-button__bar'></div>
+            <div class='menu-button__bar'></div>
+            <div class='menu-button__bar'></div>
+          </div>
+        </div>
+        <div id='menu' class='menu'>
+          <div class='menu__inner'>
+            Overlay content... ?
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

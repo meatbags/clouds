@@ -8,7 +8,8 @@ class Renderer {
     this.root = root;
 
     // three.js setup
-    this.renderer = new THREE.WebGLRenderer({});
+    this.domElement = document.querySelector('#canvas-target');
+    this.renderer = new THREE.WebGLRenderer({canvas: this.domElement});
     this.renderer.setClearColor(0x0, 1);
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
@@ -35,7 +36,6 @@ class Renderer {
     // add to dom
     this.resize();
     window.addEventListener('resize', () => { this.resize(); });
-    document.querySelector('#canvas-target').appendChild(this.renderer.domElement);
   }
 
   resize() {

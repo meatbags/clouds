@@ -1,27 +1,26 @@
-/** DEPRECATED Raycaster for 3d mouse interaction. */
+/** Raycaster for 3d mouse interaction. */
 
 class Raycaster {
-
-  /** Create THREE.js raycaster. */
-  constructor(domElement, camera) {
-    this.domElement = domElement;
+  constructor(camera) {
+    this.domElement = document.querySelector('#canvas-target');
     this.camera = camera;
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
-    this.rect = this.domElement.getBoundingClientRect();
+
+    // dom
+    this.resize();
+    window.addEventListener('resize', () => { this.resize(); });
   }
 
-  /** Resize target rect. */
   resize() {
     this.rect = this.domElement.getBoundingClientRect();
   }
 
-  /** Perform raycasting. */
-  cast(e, objects) {
-    this.mouse.x = ((e.clientX - this.rect.left) / this.rect.width) * 2 - 1;
-    this.mouse.y = -(((e.clientY - this.rect.top) / this.rect.height) * 2 - 1);
+  intersect(x, y, object) {
+    this.mouse.x = (x / this.rect.width) * 2 - 1;
+    this.mouse.y = -((y / this.rect.height) * 2 - 1);
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    return this.raycaster.intersectObjects(objects);
+    return this.raycaster.intersectObject(object);
   }
 }
 

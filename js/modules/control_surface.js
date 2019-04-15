@@ -6,16 +6,19 @@ import { Clamp } from '../utils/maths';
 
 class ControlSurface {
   constructor(root) {
+    this.logic = root.logic;
     this.player = root.logic.player;
     this.domElement = document.querySelector('#canvas-target');
+    this.rect = null;
     this.centre = {x:0, y:0};
-    this.resize();
     this.rotation = new THREE.Vector2();
     this.timestamp = null;
     this.threshold = {click: 225, pan: 200, mouseDelta: 0.25};
     this.scaleRotation = {x: 1, y: 1};
 
     // events
+    this.resize();
+    window.addEventListener('resize', () => { this.resize(); });
     this.keyboard = new Keyboard((key) => { this.onKeyboard(key); });
     this.mouse = new Mouse(
       this.domElement,
@@ -65,14 +68,15 @@ class ControlSurface {
         this.player.setRotation(pitch, yaw);
       }
     } else {
-      // mouse move
+      this.logic.world.onMouseMove(e.clientX - this.rect.left, e.clientY - this.rect.top);
     }
   }
 
   onMouseUp(e) {
     this.mouse.stop();
     if (Date.now() - this.timestamp < this.threshold.click && Math.hypot(this.mouse.delta.x, this.mouse.delta.y) < window.innerWidth * this.threshold.mouseDelta) {
-       // click !
+      // under click threshold
+      this.logic.world.onClick(e.clientX - this.rect.left, e.clientY - this.rect.top);
     }
   }
 
@@ -99,9 +103,9 @@ class ControlSurface {
   }
 
   resize() {
-    const rect = this.domElement.getBoundingClientRect();
-    this.centre.x = rect.width / 2;
-    this.centre.y = rect.height / 2;
+    this.rect = this.domElement.getBoundingClientRect();
+    this.centre.x = this.rect.width / 2;
+    this.centre.y = this.rect.height / 2;
   }
 }
 

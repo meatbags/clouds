@@ -2,11 +2,14 @@
 
 import '../lib/glsl/SkyShader.js';
 import CloudMaterial from './material/cloud_material';
+import Hotspot from '../ui/hotspot';
 
 class World {
   constructor(root) {
     this.root = root;
     this.scene = root.scene;
+    this.camera = root.camera.camera;
+    this.domElement = document.querySelector('#canvas-target');
 
     // clouds
     this.cloudMat = CloudMaterial;
@@ -33,12 +36,53 @@ class World {
     const sunPos = new THREE.Vector3(d * Math.cos(phi), d * Math.sin(phi) * Math.sin(theta), d * Math.sin(phi) * Math.cos(theta));
     this.sky.material.uniforms.sunPosition.value.copy(sunPos);
     this.scene.add(this.sky);
+
+    // interactive points
+    this.hotspots = [];
+    const hotspot = new Hotspot(this.camera, {
+      position: new THREE.Vector3(0, 0, 10),
+      onHover: () => { console.log("hover"); },
+      onClick: () => {},
+    });
+    this.hotspots.push(hotspot);
+    this.scene.add(hotspot.mesh);
+  }
+
+  onMouseMove(x, y) {
+    let res = false;
+    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
+      this.hotspots[i].onMouseMove(x, y);
+      res = res || this.hotspots[i].hover;
+    }
+
+    if (res) {
+      this.domElement.classList.add('clickable');
+    } else {
+      this.domElement.classList.remove('clickable');
+    }
+  }
+
+  onClick(x, y) {
+    this.hotspots.forEach(e => {
+      e.onClick(x, y);
+    });
   }
 
   update(delta) {
     this.cloudMat.uniforms.uTime.value += delta;
     this.cloudPlane.position.copy(this.root.camera.camera.position);
     this.cloudPlane.position.y = -50;
+
+    // interaction
+    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
+      this.hotspots[i].update();
+    }
+  }
+
+  draw(ctx) {
+    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
+      this.hotspots[i].draw(ctx);
+    }
   }
 }
 

@@ -3,6 +3,7 @@
 import Logic from './modules/logic';
 import Renderer from './modules/renderer';
 import ControlSurface from './modules/control_surface';
+import Menu from './overlay/menu';
 
 class App {
   constructor() {
@@ -10,6 +11,7 @@ class App {
     this.logic = new Logic();
     this.renderer = new Renderer(this);
     this.controlSurface = new ControlSurface(this);
+    this.menu = new Menu();
 
     // timing
     this.time = {
@@ -18,6 +20,7 @@ class App {
     };
 
     // run
+    window.dispatchEvent(new Event('resize'));
     this.active = true;
     this.loop();
   }
@@ -30,6 +33,7 @@ class App {
       this.time.now = t;
       this.logic.update(delta);
       this.renderer.render(delta);
+      this.logic.draw(delta);
     }
   }
 }
