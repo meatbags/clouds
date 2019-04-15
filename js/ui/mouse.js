@@ -21,10 +21,7 @@ class Mouse {
     }
 
     // universal
-    this.domElement.addEventListener('click', evt => {
-      onMove(evt);
-      onUp(evt);
-    }, false);
+    // this.domElement.addEventListener('click', evt => { onMove(evt); }, false);
   }
 
   start(e) {

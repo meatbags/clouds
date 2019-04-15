@@ -44,13 +44,11 @@ class ControlSurface {
     // record player rotation
     this.rotation.y = this.player.rotation.y;
     this.rotation.x = this.player.rotation.x;
-    this.timestamp = Date.now();
+    this.timestamp = performance.now();
     this.mouse.start(e);
 
-    // set cursor position mobile
-    if (this.isMobile) {
-      this.onMouseMove(e);
-    }
+    // set cursor position
+    this.onMouseMove(e);
   }
 
   onMouseMove(e) {
@@ -74,9 +72,12 @@ class ControlSurface {
 
   onMouseUp(e) {
     this.mouse.stop();
-    if (Date.now() - this.timestamp < this.threshold.click && Math.hypot(this.mouse.delta.x, this.mouse.delta.y) < window.innerWidth * this.threshold.mouseDelta) {
-      // under click threshold
+
+    // check for click
+    const now = performance.now();
+    if ((now - this.timestamp < this.threshold.click) && Math.hypot(this.mouse.delta.x, this.mouse.delta.y) < window.innerWidth * this.threshold.mouseDelta) {
       this.logic.world.onClick(e.clientX - this.rect.left, e.clientY - this.rect.top);
+      this.timestamp = performance.now();
     }
   }
 

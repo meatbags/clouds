@@ -39,13 +39,11 @@ class World {
 
     // interactive points
     this.hotspots = [];
-    const hotspot = new Hotspot(this.camera, {
+    const hotspot = new Hotspot(this.scene, this.camera, {
       position: new THREE.Vector3(0, 0, 10),
-      onHover: () => { console.log("hover"); },
-      onClick: () => {},
+      clickEvent: () => { console.log("click!"); },
     });
     this.hotspots.push(hotspot);
-    this.scene.add(hotspot.mesh);
   }
 
   onMouseMove(x, y) {
@@ -63,9 +61,9 @@ class World {
   }
 
   onClick(x, y) {
-    this.hotspots.forEach(e => {
-      e.onClick(x, y);
-    });
+    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
+      this.hotspots[i].onClick(x, y);
+    }
   }
 
   update(delta) {
