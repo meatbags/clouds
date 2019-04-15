@@ -31,7 +31,11 @@ class Logic {
 
   draw(delta) {
     this.canvas2D.clear();
+    this.canvas2D.setStyle();
     this.world.draw(this.canvas2D.ctx);
+    if (this.player.noclip) {
+      this.canvas2D.ctx.fillText('[noclip]', 20, this.canvas2D.cvs.height - 20);
+    }
   }
 }
 

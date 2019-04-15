@@ -40,6 +40,7 @@ class Player {
     this.maxPitch = Math.PI * 0.15;
     this.adjust = {slow: 0.05, normal: 0.1, fast: 0.125, maximum: 0.3};
     this.noclip = false;
+    this.noclipSpeed = 16.0;
 
     // input
     this.keys = {disabled: false};

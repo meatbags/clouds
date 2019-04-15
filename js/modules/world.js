@@ -20,7 +20,7 @@ class World {
     const directional = new THREE.DirectionalLight(0xffffff, 1);
     const ambient = new THREE.AmbientLight(0xffffff, 0.5);
     directional.position.set(0, 0, 0);
-    directional.target.position.set(0, -0.35, 1);
+    directional.target.position.set(0.125, -0.35, 1);
     this.scene.add(ambient, directional, directional.target);
 
     // interactive points

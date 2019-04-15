@@ -17,6 +17,12 @@ class Canvas2D {
     this.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
   }
 
+  setStyle() {
+    this.ctx.fillStyle = '#fff';
+    this.ctx.strokeStyle = '#fff';
+    this.ctx.lineWidth = 1;
+  }
+
   resize() {
     this.cvs.width = Math.floor(Config.width / 100 * window.innerWidth);
     this.cvs.height = Math.floor(Config.height / 100 * window.innerHeight);

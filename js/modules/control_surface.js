@@ -95,6 +95,12 @@ class ControlSurface {
       case 's': case 'S': case 'ArrowDown':
         this.player.keys.down = this.keyboard.keys[key];
         break;
+      case 'x': case 'X':
+        if (this.keyboard.isControl()) {
+          this.player.noclip = this.player.noclip == false;
+          this.keyboard.release(key);
+        }
+        break;
       case ' ':
         this.player.keys.jump = this.keyboard.keys[key];
         break;
