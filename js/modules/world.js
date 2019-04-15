@@ -3,6 +3,7 @@
 import '../lib/glsl/SkyShader.js';
 import CloudMaterial from './material/cloud_material';
 import Hotspot from '../ui/hotspot';
+import Loader from '../utils/loader';
 
 class World {
   constructor(root) {
@@ -11,20 +12,34 @@ class World {
     this.camera = root.camera.camera;
     this.domElement = document.querySelector('#canvas-target');
 
-    // clouds
-    this.cloudMat = CloudMaterial;
-    this.cloudMat.transparent = true;
-    this.cloudMat.uniforms.uTime.value = Math.random() * 60;
-    this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMat);
-    this.cloudPlane.rotation.x = -Math.PI / 2;
-    this.scene.add(this.cloudPlane);
+    // load
+    this.loadSky();
+    this.loadModels();
 
-    const directional = new THREE.DirectionalLight(0xffffff, 0.5);
-    const ambient = new THREE.AmbientLight(0xffffff, 0.1);
+    // lighting
+    const directional = new THREE.DirectionalLight(0xffffff, 1);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
     directional.position.set(0, 0, 0);
-    directional.target.position.set(0, -0.25, 1);
+    directional.target.position.set(0, -0.35, 1);
     this.scene.add(ambient, directional, directional.target);
 
+    // interactive points
+    this.hotspots = [];
+    const hotspot = new Hotspot(this.scene, this.camera, {
+      position: new THREE.Vector3(0, 0, 10),
+      clickEvent: () => { console.log("click!"); },
+    });
+    this.hotspots.push(hotspot);
+  }
+
+  loadModels() {
+    this.loader = new Loader('./assets');
+    this.loader.loadFBX('concrete_box').then(obj => {
+      this.scene.add(obj);
+    });
+  }
+
+  loadSky() {
     // sky
     this.sky = new THREE.Sky();
     this.sky.scale.setScalar(450000);
@@ -37,13 +52,13 @@ class World {
     this.sky.material.uniforms.sunPosition.value.copy(sunPos);
     this.scene.add(this.sky);
 
-    // interactive points
-    this.hotspots = [];
-    const hotspot = new Hotspot(this.scene, this.camera, {
-      position: new THREE.Vector3(0, 0, 10),
-      clickEvent: () => { console.log("click!"); },
-    });
-    this.hotspots.push(hotspot);
+    // clouds
+    this.cloudMat = CloudMaterial;
+    this.cloudMat.transparent = true;
+    this.cloudMat.uniforms.uTime.value = Math.random() * 60;
+    this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMat);
+    this.cloudPlane.rotation.x = -Math.PI / 2;
+    this.scene.add(this.cloudPlane);
   }
 
   onMouseMove(x, y) {

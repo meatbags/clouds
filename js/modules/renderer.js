@@ -13,7 +13,7 @@ class Renderer {
     this.renderer.setClearColor(0x0, 1);
     this.renderer.gammaInput = true;
     this.renderer.gammaOutput = true;
-    this.renderer.gammaFactor = 2.5;
+    this.renderer.gammaFactor = 2.0;
     this.width = Math.floor(Config.width / 100 * window.innerWidth);
     this.height = Math.floor(Config.height / 100 * window.innerHeight);
     this.size = new THREE.Vector2(this.width, this.height);

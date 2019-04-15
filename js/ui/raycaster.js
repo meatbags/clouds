@@ -16,11 +16,11 @@ class Raycaster {
     this.rect = this.domElement.getBoundingClientRect();
   }
 
-  intersect(x, y, object) {
+  intersects(x, y, object) {
     this.mouse.x = (x / this.rect.width) * 2 - 1;
     this.mouse.y = -((y / this.rect.height) * 2 - 1);
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    return this.raycaster.intersectObject(object);
+    return (this.raycaster.intersectObject(object).length > 0);
   }
 }
 

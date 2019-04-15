@@ -34,27 +34,25 @@ class Hotspot {
 
   onMouseMove(x, y) {
     if (this.active) {
-      const res = this.raycaster.intersect(x, y, this.mesh);
-      this.hover = res.length > 0;
+      this.hover = this.raycaster.intersects(x, y, this.mesh);
     }
   }
 
   onClick(x, y) {
     const now = performance.now();
     if (this.active && (this.timestamp == null || (now - this.timestamp) > this.timeout)) {
-      const res = this.raycaster.intersect(x, y, this.mesh);
-      if (res.length > 0) {
+      if (this.raycaster.intersects(x, y, this.mesh)) {
         this.clickEvent();
-        this.timestamp = performance.now();
+        this.timestamp = now;
       }
     }
   }
 
   update() {
-    this.active = this.camera.position.distanceTo(this.position) <= this.radius;
+    this.active = this.camera.position.distanceTo(this.position) <= this.radius && this.screenSpace.isOnScreen(this.position);
     this.hover = this.hover && this.active;
   }
-
+  
   draw(ctx) {
     if (this.active) {
       const coords = this.screenSpace.toScreenSpace(this.position);
