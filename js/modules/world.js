@@ -4,6 +4,7 @@ import '../lib/glsl/SkyShader.js';
 import CloudMaterial from './material/cloud_material';
 import Hotspot from '../ui/hotspot';
 import Loader from '../utils/loader';
+import LoadingScreen from '../overlay/loading_screen';
 
 class World {
   constructor(root) {
@@ -33,9 +34,16 @@ class World {
   }
 
   loadModels() {
+    const staticAssets = ['concrete_box'];
+    this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
-    this.loader.loadFBX('concrete_box').then(obj => {
-      this.scene.add(obj);
+
+    // load assets and add to scene
+    staticAssets.forEach(asset => {
+      this.loader.loadFBX('concrete_box').then(obj => {
+        this.scene.add(obj);
+        this.loadingScreen.onAssetLoaded();
+      });
     });
   }
 
