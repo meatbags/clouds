@@ -20,9 +20,25 @@ class App {
     };
 
     // run
-    window.dispatchEvent(new Event('resize'));
+    this.bindEvents();
     this.active = true;
     this.loop();
+  }
+
+  bindEvents() {
+    // catch resize lag on fullscreen change
+    window.addEventListener('resize', () => {
+      if (window.innerHeight === screen.height && !this.isFullscreen) {
+        this.isFullscreen = true;
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 50);
+      }
+      this.isFullscreen = false;
+    });
+    
+    // call initial resize
+    window.dispatchEvent(new Event('resize'));
   }
 
   loop() {

@@ -3,6 +3,7 @@
 import '../lib/glsl/SkyShader.js';
 import CloudMaterial from './material/cloud_material';
 import Hotspot from '../ui/hotspot';
+import Portal from '../ui/portal';
 import Loader from '../utils/loader';
 import LoadingScreen from '../overlay/loading_screen';
 
@@ -11,6 +12,7 @@ class World {
     this.root = root;
     this.scene = root.scene;
     this.camera = root.camera.camera;
+    this.player = root.player;
     this.domElement = document.querySelector('#canvas-target');
 
     // load
@@ -31,16 +33,29 @@ class World {
       clickEvent: () => { console.log("click!"); },
     });
     this.hotspots.push(hotspot);
+
+    // portals
+    this.portals = [];
+    const box1 = new THREE.Box3();
+    const box2 = new THREE.Box3();
+    box1.setFromCenterAndSize(new THREE.Vector3(10, 0, 0), new THREE.Vector3(2, 2, 2));
+    box2.setFromCenterAndSize(new THREE.Vector3(0, 0, 10), new THREE.Vector3(2, 2, 2));
+    const portal = new Portal(box1, box2, {
+      onTeleport: () => { console.log('Teleport'); },
+      showBoxes: true,
+      scene: this.scene,
+    });
+    this.portals.push(portal);
   }
 
   loadModels() {
-    const staticAssets = ['concrete_box'];
+    const staticAssets = ['floor'];
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
     // load assets and add to scene
     staticAssets.forEach(asset => {
-      this.loader.loadFBX('concrete_box').then(obj => {
+      this.loader.loadFBX(asset).then(obj => {
         this.scene.add(obj);
         this.loadingScreen.onAssetLoaded();
       });
@@ -90,14 +105,18 @@ class World {
   }
 
   update(delta) {
-    this.cloudMat.uniforms.uTime.value += delta;
-    this.cloudPlane.position.copy(this.root.camera.camera.position);
-    this.cloudPlane.position.y = -50;
-
     // interaction
     for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
       this.hotspots[i].update();
     }
+    for (let i=0, lim=this.portals.length; i<lim; ++i) {
+      this.portals[i].update(this.player);
+    }
+
+    // clouds
+    this.cloudMat.uniforms.uTime.value += delta;
+    this.cloudPlane.position.copy(this.player.position);
+    this.cloudPlane.position.y -= 50;
   }
 
   draw(ctx) {

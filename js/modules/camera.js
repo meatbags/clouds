@@ -26,7 +26,7 @@ class Camera {
     this.camera.aspect = this.aspectRatio;
     this.camera.updateProjectionMatrix();
   }
-
+  
   update(delta) {
     const offsetXZ = this.offset - this.offset * Math.abs(Math.sin(this.rotation.y));
     const offsetY = this.offset;
