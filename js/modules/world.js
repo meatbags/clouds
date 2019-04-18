@@ -1,6 +1,7 @@
 /** Set up and update world */
 
 import '../lib/glsl/SkyShader.js';
+import Config from '../config';
 import CloudMaterial from './material/cloud_material';
 import Hotspot from '../ui/hotspot';
 import PortalHandler from './portal_handler';
@@ -39,7 +40,7 @@ class World {
   }
 
   loadModels() {
-    const staticAssets = ['floor', 'mobile'];
+    const staticAssets = ['turret', 'floor', 'mobile'];
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
@@ -57,11 +58,19 @@ class World {
     // load assets and add to scene
     staticAssets.forEach(asset => {
       this.loader.loadFBX(asset).then(obj => {
-        this.scene.add(obj);
-        this.loadingScreen.onAssetLoaded();
-
         // temp
-        addToColliderSystem(obj);
+        if (asset == 'floor') {
+          addToColliderSystem(obj);
+        } else {
+          this.scene.add(obj);
+        }
+
+        // apply offsets
+        if (Config.world.offset[asset] !== undefined) {
+          obj.position.add(Config.world.offset[asset]);
+        }
+
+        this.loadingScreen.onAssetLoaded();
       });
     });
   }

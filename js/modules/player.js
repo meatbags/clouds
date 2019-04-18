@@ -3,13 +3,14 @@
  **/
 
 import { Blend, MinAngleBetween } from '../utils/maths';
+import Config from '../config';
 
 class Player {
   constructor(root) {
     this.root = root;
 
     // set position
-    this.position = new THREE.Vector3(0, 1, 0);
+    this.position = Config.player.startPosition.clone();
     this.rotation = new THREE.Vector2(Math.PI, 0);
     this.motion = new THREE.Vector3();
     this.target = {
