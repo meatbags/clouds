@@ -15,7 +15,10 @@ const Config = {
       basement: new THREE.Vector3(0, 0, 0),
       garden: new THREE.Vector3(0, 0, 0),
     }
-  }
+  },
+  lighting: {
+    sunlightDirection: new THREE.Vector3(0, -0.35, 1),
+  },
 };
 
 export default Config;
