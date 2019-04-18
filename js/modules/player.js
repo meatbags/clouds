@@ -10,7 +10,7 @@ class Player {
 
     // set position
     this.position = new THREE.Vector3(0, 1, 0);
-    this.rotation = new THREE.Vector2();
+    this.rotation = new THREE.Vector2(Math.PI, 0);
     this.motion = new THREE.Vector3();
     this.target = {
       position: this.position.clone(),

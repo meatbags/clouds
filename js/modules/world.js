@@ -39,7 +39,7 @@ class World {
   }
 
   loadModels() {
-    const staticAssets = ['floor'];
+    const staticAssets = ['floor', 'mobile'];
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
