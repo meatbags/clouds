@@ -1,7 +1,7 @@
 /** Control surface/ user interface. */
 
-import Mouse from '../ui/mouse';
-import Keyboard from '../ui/keyboard';
+import Mouse from './mouse';
+import Keyboard from './keyboard';
 import { Clamp } from '../utils/maths';
 
 class ControlSurface {

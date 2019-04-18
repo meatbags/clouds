@@ -2,7 +2,7 @@
 
 import Logic from './modules/logic';
 import Renderer from './modules/renderer';
-import ControlSurface from './modules/control_surface';
+import ControlSurface from './ui/control_surface';
 import Menu from './overlay/menu';
 
 class App {
@@ -36,7 +36,7 @@ class App {
       }
       this.isFullscreen = false;
     });
-    
+
     // call initial resize
     window.dispatchEvent(new Event('resize'));
   }

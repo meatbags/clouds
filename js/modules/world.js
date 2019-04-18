@@ -1,9 +1,9 @@
-/** World objects */
+/** Set up and update world */
 
 import '../lib/glsl/SkyShader.js';
 import CloudMaterial from './material/cloud_material';
 import Hotspot from '../ui/hotspot';
-import Portal from '../ui/portal';
+import PortalHandler from './portal_handler';
 import Loader from '../utils/loader';
 import LoadingScreen from '../overlay/loading_screen';
 
@@ -35,17 +35,7 @@ class World {
     this.hotspots.push(hotspot);
 
     // portals
-    this.portals = [];
-    const box1 = new THREE.Box3();
-    const box2 = new THREE.Box3();
-    box1.setFromCenterAndSize(new THREE.Vector3(10, 0, 0), new THREE.Vector3(2, 2, 2));
-    box2.setFromCenterAndSize(new THREE.Vector3(0, 0, 10), new THREE.Vector3(2, 2, 2));
-    const portal = new Portal(box1, box2, {
-      onTeleport: () => { console.log('Teleport'); },
-      showBoxes: true,
-      scene: this.scene,
-    });
-    this.portals.push(portal);
+    this.portals = new PortalHandler(this.root);
   }
 
   loadModels() {
@@ -53,11 +43,25 @@ class World {
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
+    // temp
+    const addToColliderSystem = obj => {
+      if (obj.type == 'Mesh') {
+        this.root.colliderSystem.add(obj);
+      } else if (obj.children && obj.children.length) {
+        obj.children.forEach(child => {
+          addToColliderSystem(child);
+        });
+      }
+    };
+
     // load assets and add to scene
     staticAssets.forEach(asset => {
       this.loader.loadFBX(asset).then(obj => {
         this.scene.add(obj);
         this.loadingScreen.onAssetLoaded();
+
+        // temp
+        addToColliderSystem(obj);
       });
     });
   }
@@ -106,11 +110,9 @@ class World {
 
   update(delta) {
     // interaction
+    this.portals.update();
     for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
       this.hotspots[i].update();
-    }
-    for (let i=0, lim=this.portals.length; i<lim; ++i) {
-      this.portals[i].update(this.player);
     }
 
     // clouds

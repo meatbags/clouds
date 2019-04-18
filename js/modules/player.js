@@ -24,7 +24,7 @@ class Player {
       position: this.target.position,
       motion: this.motion,
       gravity: 18,
-      floor: 0,
+      floor: -25,
     });
 
     // physical attributes
@@ -36,11 +36,11 @@ class Player {
     this.falling = false;
     this.fallTime = 0;
     this.fallTimeThreshold = 0.2;
-    this.minPitch = Math.PI * -0.15;
-    this.maxPitch = Math.PI * 0.15;
+    this.minPitch = Math.PI * -0.2;
+    this.maxPitch = Math.PI * 0.25;
     this.adjust = {slow: 0.05, normal: 0.1, fast: 0.125, maximum: 0.3};
     this.noclip = false;
-    this.noclipSpeed = 16.0;
+    this.noclipSpeed = 30;
 
     // input
     this.keys = {disabled: false};
