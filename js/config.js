@@ -7,6 +7,7 @@ const Config = {
     startPosition: new THREE.Vector3(4, 18, -8),
   },
   world: {
+    cloudComplexity: 1,
     offset: {
       turret: new THREE.Vector3(4, 17, -8),
       library: new THREE.Vector3(0, 0, 0),

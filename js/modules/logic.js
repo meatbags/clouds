@@ -15,17 +15,8 @@ class Logic {
     this.canvas2D = new Canvas2D();
 
     // settings
-    // sky 0x111823
-    // prussian blue 0x003153
+    // sky 0x111823 prussian blue 0x003153
     this.scene.fog = new THREE.FogExp2(0x111823, 0.004);
-
-    // temp
-    //const box = new THREE.BoxBufferGeometry(10, 50, 10);
-    //const mat = new THREE.MeshPhysicalMaterial({color: 0x888888, metalness: 0, roughness: 0.05});
-    //const floor = new THREE.Mesh(box, mat);
-    //floor.position.set(0, -24, 0);
-    //this.scene.add(floor);
-    //this.colliderSystem.add(floor);
   }
 
   update(delta) {

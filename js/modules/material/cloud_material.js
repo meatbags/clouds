@@ -1,9 +1,11 @@
 /** Custom cloud shader */
 
+import Config from '../../config';
+
 const CloudMaterial = new THREE.ShaderMaterial({
 	uniforms: {
   	uTime: { value: 1.0 },
-    uDetailLevel: { value: 2.0 }, // 1, 2, 3
+    uDetailLevel: { value: Config.world.cloudComplexity }, // 1, 2, 3
 	},
 	vertexShader: `
     varying vec2 vUV;

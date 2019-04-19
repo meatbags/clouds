@@ -44,26 +44,20 @@ class World {
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
-    // temp
-    const addToColliderSystem = obj => {
-      if (obj.type == 'Mesh') {
-        this.root.colliderSystem.add(obj);
-      } else if (obj.children && obj.children.length) {
-        obj.children.forEach(child => {
-          addToColliderSystem(child);
-        });
-      }
-    };
-
     // load assets and add to scene
     staticAssets.forEach(asset => {
       this.loader.loadFBX(asset).then(obj => {
         // temp
         if (asset == 'floor') {
-          addToColliderSystem(obj);
-        } else {
-          this.scene.add(obj);
+          this.root.colliderSystem.add(obj);
+          const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
+          obj.children.forEach(child => {
+            child.material = wireMat;
+          });
         }
+
+        // add
+        this.scene.add(obj);
 
         // apply offsets
         if (Config.world.offset[asset] !== undefined) {
