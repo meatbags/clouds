@@ -3,8 +3,8 @@
 import '../lib/glsl/SkyShader.js';
 import Config from '../config';
 import CloudMaterial from './material/cloud_material';
-import Hotspot from '../ui/hotspot';
 import PortalHandler from './portal_handler';
+import PuzzleHandler from './puzzle_handler';
 import Loader from '../utils/loader';
 import LoadingScreen from '../overlay/loading_screen';
 
@@ -14,7 +14,6 @@ class World {
     this.scene = root.scene;
     this.camera = root.camera.camera;
     this.player = root.player;
-    this.domElement = document.querySelector('#canvas-target');
 
     // load
     this.loadSky();
@@ -27,16 +26,9 @@ class World {
     directional.target.position.copy(Config.lighting.sunlightDirection);
     this.scene.add(ambient, directional, directional.target);
 
-    // interactive points
-    this.hotspots = [];
-    const hotspot = new Hotspot(this.scene, this.camera, {
-      position: new THREE.Vector3(0, 0, 10),
-      clickEvent: () => { console.log("click!"); },
-    });
-    this.hotspots.push(hotspot);
-
-    // portals
-    this.portals = new PortalHandler(this.root);
+    // portals & puzzles
+    this.portalHandler = new PortalHandler(this.root);
+    this.puzzleHandler = new PuzzleHandler(this.scene, this.camera);
   }
 
   loadModels() {
@@ -83,51 +75,31 @@ class World {
     this.scene.add(this.sky);
 
     // clouds
-    this.cloudMat = CloudMaterial;
-    this.cloudMat.transparent = true;
-    this.cloudMat.uniforms.uTime.value = Math.random() * 60;
-    this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMat);
-    this.cloudPlane.rotation.x = -Math.PI / 2;
-    this.scene.add(this.cloudPlane);
-  }
-
-  onMouseMove(x, y) {
-    let res = false;
-    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
-      this.hotspots[i].onMouseMove(x, y);
-      res = res || this.hotspots[i].hover;
-    }
-
-    if (res) {
-      this.domElement.classList.add('clickable');
-    } else {
-      this.domElement.classList.remove('clickable');
-    }
-  }
-
-  onClick(x, y) {
-    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
-      this.hotspots[i].onClick(x, y);
+    if (Config.world.cloudComplexity) {
+      this.cloudMat = CloudMaterial;
+      this.cloudMat.transparent = true;
+      this.cloudMat.uniforms.uTime.value = Math.random() * 60;
+      this.cloudPlane = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMat);
+      this.cloudPlane.rotation.x = -Math.PI / 2;
+      this.scene.add(this.cloudPlane);
     }
   }
 
   update(delta) {
     // interaction
-    this.portals.update();
-    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
-      this.hotspots[i].update();
-    }
+    this.portalHandler.update(delta);
+    this.puzzleHandler.update(delta);
 
     // clouds
-    this.cloudMat.uniforms.uTime.value += delta;
-    this.cloudPlane.position.copy(this.player.position);
-    this.cloudPlane.position.y -= 50;
+    if (this.cloudMat) {
+      this.cloudMat.uniforms.uTime.value += delta;
+      this.cloudPlane.position.copy(this.player.position);
+      this.cloudPlane.position.y -= 50;
+    }
   }
 
   draw(ctx) {
-    for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
-      this.hotspots[i].draw(ctx);
-    }
+    this.puzzleHandler.draw(ctx);
   }
 }
 
