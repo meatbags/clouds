@@ -25,6 +25,10 @@ class Logic {
     this.scene.fog = new THREE.FogExp2(0x111823, 0.004);
   }
 
+  bind(root) {
+    this.puzzleHandler.setOutlinePassTarget(root.renderer.passOutline);
+  }
+  
   update(delta) {
     this.portalHandler.update(delta);
     this.puzzleHandler.update(delta);

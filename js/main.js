@@ -8,19 +8,19 @@ import Menu from './overlay/menu';
 class App {
   constructor() {
     // init
+    this.renderer = new Renderer();
     this.logic = new Logic();
-    this.renderer = new Renderer(this);
-    this.controlSurface = new ControlSurface(this);
+    this.controlSurface = new ControlSurface();
     this.menu = new Menu();
 
-    // timing
-    this.time = {
-      now: performance.now(),
-      maxDelta: 0.1
-    };
+    // bind events
+    this.renderer.bind(this);
+    this.logic.bind(this);
+    this.controlSurface.bind(this);
+    this.bindEvents();
 
     // run
-    this.bindEvents();
+    this.time = {now: performance.now(), maxDelta: 0.1};
     this.active = true;
     this.loop();
   }
@@ -36,7 +36,7 @@ class App {
       }
       this.isFullscreen = false;
     });
-
+    
     // call initial resize
     window.dispatchEvent(new Event('resize'));
   }

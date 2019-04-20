@@ -5,9 +5,7 @@ import Keyboard from './keyboard';
 import { Clamp } from '../utils/maths';
 
 class ControlSurface {
-  constructor(root) {
-    this.logic = root.logic;
-    this.player = root.logic.player;
+  constructor() {
     this.domElement = document.querySelector('#canvas-target');
     this.rect = null;
     this.centre = {x:0, y:0};
@@ -27,6 +25,11 @@ class ControlSurface {
       (e) => { this.onMouseUp(e); },
       this.isMobile
     );
+  }
+
+  bind(root) {
+    this.logic = root.logic;
+    this.player = root.logic.player;
   }
 
   processTouch(e) {

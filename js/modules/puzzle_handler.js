@@ -1,5 +1,6 @@
 /** Load and handle puzzles and interaction */
 
+import Config from '../config';
 import Hotspot from '../ui/hotspot';
 import Tween from '../utils/tween';
 
@@ -29,7 +30,10 @@ class PuzzleHandler {
       mesh: this.puzzle.mesh,
       clickEvent: this.puzzle.onClick,
     });
-    this.puzzle.mesh.position.set(0, 2, 5);
+    this.puzzle.mesh.position.copy(Config.player.startPosition);
+    this.puzzle.mesh.position.z -= 5;
+    this.puzzle.mesh.position.y += 1;
+    this.puzzle.mesh.position.x += 1;
     this.hotspots.push(this.puzzle.hotspot);
   }
 
@@ -54,8 +58,12 @@ class PuzzleHandler {
   }
 
   update(delta) {
+    // update 3D interaction
+    this.outlinePassTarget.selectedObjects = [];
     for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
-      this.hotspots[i].update();
+      if (this.hotspots[i].update() && this.hotspots[i].mesh.material.visible) {
+        this.outlinePassTarget.selectedObjects.push(this.hotspots[i].mesh);
+      }
     }
 
     // animation
@@ -70,6 +78,10 @@ class PuzzleHandler {
     for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
       this.hotspots[i].draw(ctx);
     }
+  }
+
+  setOutlinePassTarget(target) {
+    this.outlinePassTarget = target;
   }
 }
 
