@@ -66,7 +66,7 @@ class ControlSurface {
         this.player.setRotation(pitch, yaw);
       }
     } else {
-      this.logic.world.puzzleHandler.onMouseMove(e.clientX - this.rect.left, e.clientY - this.rect.top);
+      this.logic.puzzleHandler.onMouseMove(e.clientX - this.rect.left, e.clientY - this.rect.top);
     }
   }
 
@@ -76,7 +76,7 @@ class ControlSurface {
     // check for click
     const now = performance.now();
     if ((now - this.timestamp < this.threshold.click) && Math.hypot(this.mouse.delta.x, this.mouse.delta.y) < window.innerWidth * this.threshold.mouseDelta) {
-      this.logic.world.puzzleHandler.onClick(e.clientX - this.rect.left, e.clientY - this.rect.top);
+      this.logic.puzzleHandler.onClick(e.clientX - this.rect.left, e.clientY - this.rect.top);
       this.timestamp = performance.now();
     }
   }

@@ -23,14 +23,12 @@ class Renderer {
     const radius = 0.125;
     const threshold = 0.96;
     this.passRender = new THREE.RenderPass(root.logic.scene, root.logic.camera.camera);
-    //this.passPoster = new THREE.PosterPass(this.size);
     this.passBloom = new THREE.UnrealBloomPass(this.size, strength, radius, threshold);
     this.passBloom.renderToScreen = true;
 
     // composer
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.addPass(this.passRender);
-    //this.composer.addPass(this.passPoster);
     this.composer.addPass(this.passBloom);
 
     // add to dom

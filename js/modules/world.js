@@ -3,17 +3,14 @@
 import '../lib/glsl/SkyShader.js';
 import Config from '../config';
 import CloudMaterial from './material/cloud_material';
-import PortalHandler from './portal_handler';
-import PuzzleHandler from './puzzle_handler';
 import Loader from '../utils/loader';
 import LoadingScreen from '../overlay/loading_screen';
 
 class World {
-  constructor(root) {
-    this.root = root;
-    this.scene = root.scene;
-    this.camera = root.camera.camera;
-    this.player = root.player;
+  constructor(scene, player, colliderSystem) {
+    this.scene = scene;
+    this.player = player;
+    this.colliderSystem = colliderSystem;
 
     // load
     this.loadSky();
@@ -25,10 +22,6 @@ class World {
     directional.position.set(0, 0, 0);
     directional.target.position.copy(Config.lighting.sunlightDirection);
     this.scene.add(ambient, directional, directional.target);
-
-    // portals & puzzles
-    this.portalHandler = new PortalHandler(this.root);
-    this.puzzleHandler = new PuzzleHandler(this.scene, this.camera);
   }
 
   loadModels() {
@@ -41,7 +34,7 @@ class World {
       this.loader.loadFBX(asset).then(obj => {
         // temp
         if (asset == 'floor') {
-          this.root.colliderSystem.add(obj);
+          this.colliderSystem.add(obj);
           const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
           obj.children.forEach(child => {
             child.material = wireMat;
@@ -86,20 +79,12 @@ class World {
   }
 
   update(delta) {
-    // interaction
-    this.portalHandler.update(delta);
-    this.puzzleHandler.update(delta);
-
     // clouds
     if (this.cloudMat) {
       this.cloudMat.uniforms.uTime.value += delta;
       this.cloudPlane.position.copy(this.player.position);
       this.cloudPlane.position.y -= 50;
     }
-  }
-
-  draw(ctx) {
-    this.puzzleHandler.draw(ctx);
   }
 }
 

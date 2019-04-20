@@ -3,8 +3,9 @@
 import Portal from '../ui/portal';
 
 class PortalHandler {
-  constructor(root) {
-    this.root = root;
+  constructor(scene, player) {
+    this.scene = scene;
+    this.player = player;
     this.createPortals();
   }
 
@@ -62,14 +63,14 @@ class PortalHandler {
       return (new Portal(e[0], e[1], {
         onTeleport: () => {},
         showBoxes: true,
-        scene: this.root.scene,
+        scene: this.scene,
       }));
     });
   }
 
   update() {
     for (let i=0, lim=this.portals.length; i<lim; ++i) {
-      this.portals[i].update(this.root.player);
+      this.portals[i].update(this.player);
     }
   }
 }
