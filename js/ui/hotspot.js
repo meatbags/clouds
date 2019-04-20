@@ -53,7 +53,6 @@ class Hotspot {
   update() {
     this.active = this.camera.position.distanceTo(this.position) <= this.radius && this.screenSpace.isOnScreen(this.position);
     this.hover = this.hover && this.active;
-    return this.hover;
   }
 
   draw(ctx) {

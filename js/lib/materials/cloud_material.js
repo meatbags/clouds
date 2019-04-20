@@ -1,4 +1,6 @@
-/** Custom cloud shader */
+/**
+  * @author https://github.com/meatbags
+  */
 
 import Config from '../../config';
 

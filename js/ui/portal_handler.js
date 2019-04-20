@@ -1,6 +1,6 @@
 /** Load and maintain portals */
 
-import Portal from '../ui/portal';
+import Portal from './portal';
 
 class PortalHandler {
   constructor(scene, player) {

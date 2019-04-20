@@ -4,8 +4,8 @@ import Player from './player';
 import Camera from './camera';
 import World from './world';
 import Canvas2D from './canvas_2d';
-import PortalHandler from './portal_handler';
-import PuzzleHandler from './puzzle_handler';
+import PortalHandler from '../ui/portal_handler';
+import PuzzleHandler from '../puzzles/puzzle_handler';
 
 class Logic {
   constructor() {
@@ -18,7 +18,7 @@ class Logic {
     // game logic
     this.world = new World(this.scene, this.player, this.colliderSystem);
     this.portalHandler = new PortalHandler(this.scene, this.player);
-    this.puzzleHandler = new PuzzleHandler(this.scene, this.camera.camera);
+    this.puzzleHandler = new PuzzleHandler(this.scene, this.camera.camera, this.colliderSystem);
 
     // settings -- sky 0x111823 prussian blue 0x003153
     this.fps = [];
@@ -28,7 +28,7 @@ class Logic {
   bind(root) {
     this.puzzleHandler.setOutlinePassTarget(root.renderer.passOutline);
   }
-  
+
   update(delta) {
     this.portalHandler.update(delta);
     this.puzzleHandler.update(delta);

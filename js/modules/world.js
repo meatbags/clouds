@@ -2,7 +2,7 @@
 
 import '../lib/glsl/SkyShader.js';
 import Config from '../config';
-import CloudMaterial from './material/cloud_material';
+import CloudMaterial from '../lib/materials/cloud_material';
 import Loader from '../utils/loader';
 import LoadingScreen from '../overlay/loading_screen';
 
