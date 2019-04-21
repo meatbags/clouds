@@ -4,89 +4,51 @@ import Config from '../config';
 import Puzzle from './puzzle';
 import Hotspot from '../ui/hotspot';
 import Tween from '../utils/tween';
+import { PrintGrid } from '../utils/solution_grid.js';
 
 class PuzzleMainRoom extends Puzzle {
   constructor(root) {
     super(root);
-    this.solution = {};
-    this.solution.grid = Config.puzzle.grid;
-    this.solution.composite = new Array(64);
-
-    // map solution grids to composite
-    const mapGrid = (grid, x, y, size) => {
-      for (let i=0, lim=grid.length; i<lim; ++i) {
-        const mx = x + i % size;
-        const my = y + (i - (i % size)) / size;
-        const index = my * 8 + mx;
-        this.solution.composite[index] = grid[i];
-      }
-    };
-    mapGrid(Config.puzzle.grid.library, 0, 0, 4);
-    mapGrid(Config.puzzle.grid.basement, 4, 0, 4);
-    mapGrid(Config.puzzle.grid.observatory, 0, 4, 4);
-    mapGrid(Config.puzzle.grid.garden, 4, 4, 4);
-
-    // create final solution grid
-    this.solution.grid.chess = new Array(64);
-    const rand = () => { return Math.floor(Math.random() * 64); };
-    const indices = [rand(), rand(), rand(), rand()];
-    while (indices.length > 0) {
-      for (let i=indices.length-1, lim=-1; i>lim; --i) {
-        const index = indices[i];
-        if (!this.solution.grid.chess[index] && !this.solution.composite[index]) {
-          this.solution.grid.chess[index] = 1;
-          this.solution.composite[index] = 1;
-          indices.splice(i, 1);
-        } else {
-          indices[i] = rand();
-        }
-      }
-    }
+    this.grid = Config.puzzle.grid;
     this.printSolution();
 
-    // temp puzzle
-    this.puzzle = {};
-    this.puzzle.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), new THREE.MeshStandardMaterial({color: 0x888888}));
-    this.puzzle.onClick = () => {
-      if (!this.puzzle.active) {
-        this.puzzle.active = true;
-        this.puzzle.collision.disable();
-        const from = this.puzzle.mesh.rotation.clone();
-        const to = from.clone();
-        to.y += Math.PI / 2;
-        this.tweens.push(new Tween(
-          this.puzzle.mesh, "rotation", from, to, {duration: 0.5, onComplete: () => { this.puzzle.active = false; }}
-        ));
+    // create floor grid
+    const size = 0.4;
+    const s = size * 0.75;
+    const clickEvent = e => {
+      if (!e.inTransit) {
+        e.inTransit = true;
+        const p1 = e.mesh.position.clone();
+        const p2 = p1.clone();
+        e.toggled = e.toggled === undefined ? true : e.toggled == false;
+        p2.z += e.toggled ? size / 4 : -size / 4;
+        e.mesh.material.color.setHex(e.toggled ? 0xffffff : 0x0);
+        this.tweens.push(new Tween(e.mesh, 'position', p1, p2, {duration: 0.2, onComplete: () => { e.inTransit = false; }}));
       }
     };
-    this.puzzle.hotspot = new Hotspot(this.scene, this.camera, {
-      mesh: this.puzzle.mesh,
-      clickEvent: this.puzzle.onClick,
-    });
-    this.puzzle.mesh.position.copy(Config.player.startPosition);
-    this.puzzle.mesh.position.z -= 5;
-    this.puzzle.mesh.position.y += 1;
-    this.puzzle.mesh.position.x += 1;
-    const mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 5, 1));
-    mesh.position.copy(this.puzzle.mesh.position);
-    this.puzzle.collision = new Collider.Mesh(mesh);
-    this.colliderSystem.add(this.puzzle.collision);
-
-    this.hotspots.push(this.puzzle.hotspot);
+    for (var i=0, lim=this.grid.solution.length; i<lim; ++i) {
+      const mat = new THREE.MeshStandardMaterial({color: 0x0});
+      const mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(s, s, s/2), mat);
+      const hotspot = new Hotspot(this.scene, this.camera, { mesh: mesh, clickEvent: clickEvent });
+      const x = i % 8;
+      const y = (i - x) / 8;
+      mesh.position.set(-2 + x * size, 3 - y * size, -4);
+      this.hotspots.push(hotspot);
+    }
   }
 
   printSolution() {
-    let printout = '';
-    for (let y=0, lim=8; y<lim; ++y) {
-      const row = this.solution.composite.slice(y * 8, y * 8 + 8);
-      printout += row.join(' ') + '\n';
-    }
-    console.log(printout);
+    PrintGrid(this.grid.library, 4);
+    PrintGrid(this.grid.basement, 4);
+    PrintGrid(this.grid.observatory, 4);
+    PrintGrid(this.grid.garden, 4);
+    PrintGrid(this.grid.chess, 8);
+    PrintGrid(this.grid.solution, 8);
 
     // check length = 20
     let count = 0;
-    for (let i=0, lim=this.solution.composite.length; i<lim; ++i) {
-      count += this.solution.composite[i];
+    for (let i=0, lim=this.grid.solution.length; i<lim; ++i) {
+      count += this.grid.solution[i];
     }
     console.log(count);
   }

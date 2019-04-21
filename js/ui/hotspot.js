@@ -22,7 +22,7 @@ class Hotspot {
     this.mesh.position.copy(this.position);
     this.mesh.material.visible = settings.visible !== undefined ? settings.visible : true;
     scene.add(this.mesh);
-
+    
     // dom
     this.resize();
     window.addEventListener('resize', () => { this.resize(); });
@@ -44,7 +44,7 @@ class Hotspot {
     const now = performance.now();
     if (this.active && (this.timestamp == null || (now - this.timestamp) > this.timeout)) {
       if (this.raycaster.intersects(x, y, this.mesh)) {
-        this.clickEvent();
+        this.clickEvent(this);
         this.timestamp = now;
       }
     }
