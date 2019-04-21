@@ -13,28 +13,52 @@ class PuzzleMainRoom extends Puzzle {
     this.printSolution();
 
     // create floor grid
+    const group = new THREE.Group();
     const size = 0.4;
     const s = size * 0.75;
-    const clickEvent = e => {
-      if (!e.inTransit) {
-        e.inTransit = true;
-        const p1 = e.mesh.position.clone();
-        const p2 = p1.clone();
-        e.toggled = e.toggled === undefined ? true : e.toggled == false;
-        p2.z += e.toggled ? size / 4 : -size / 4;
-        e.mesh.material.color.setHex(e.toggled ? 0xffffff : 0x0);
-        this.tweens.push(new Tween(e.mesh, 'position', p1, p2, {duration: 0.2, onComplete: () => { e.inTransit = false; }}));
-      }
-    };
+    const left = -(size * 8 / 2);
+    const top = -left;
     for (var i=0, lim=this.grid.solution.length; i<lim; ++i) {
       const mat = new THREE.MeshStandardMaterial({color: 0x0});
       const mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(s, s, s/2), mat);
-      const hotspot = new Hotspot(this.scene, this.camera, { mesh: mesh, clickEvent: clickEvent });
+      const hotspot = new Hotspot(this.camera, {mesh: mesh, clickEvent: e => { this.onGridItemClicked(e); }});
       const x = i % 8;
       const y = (i - x) / 8;
-      mesh.position.set(-2 + x * size, 3 - y * size, -4);
+      mesh.position.set(left + x * size, top - y * size, 0);
       this.hotspots.push(hotspot);
+      group.add(mesh);
     }
+
+    // solution button
+    const mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, s, s/2), new THREE.MeshStandardMaterial({color: 0x0}));
+    const hotspot = new Hotspot(this.camera, {mesh: mesh, clickEvent: () => { this.checkSolution(); }});
+    this.hotspots.push(hotspot);
+    mesh.position.y = top + 0.5;
+    group.add(mesh);
+
+    group.position.y += top;
+    this.scene.add(group);
+  }
+
+  onGridItemClicked(e) {
+    e.disable();
+    const p1 = e.mesh.position.clone();
+    const p2 = p1.clone();
+    e.toggled = e.toggled === undefined ? true : e.toggled == false;
+    e.mesh.material.color.setHex(e.toggled ? 0xffffff : 0x0);
+    e.enable();
+  }
+
+  checkSolution() {
+    let correct = 0;
+    for (let i=0, lim=64; i<lim; ++i) {
+      const a = this.grid.solution[i] == 1;
+      const b = this.hotspots[i].toggled === undefined ? false : this.hotspots[i].toggled;
+      if (a == b) {
+        correct += 1;
+      }
+    }
+    console.log(correct);
   }
 
   printSolution() {
@@ -46,15 +70,13 @@ class PuzzleMainRoom extends Puzzle {
     PrintGrid(this.grid.solution, 8);
 
     // check length = 20
+    /*
     let count = 0;
     for (let i=0, lim=this.grid.solution.length; i<lim; ++i) {
       count += this.grid.solution[i];
     }
     console.log(count);
-  }
-
-  checkSolution() {
-    // ?
+    */
   }
 
   update(delta) {
