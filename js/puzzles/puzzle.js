@@ -11,8 +11,10 @@ class Puzzle {
   }
 
   onClick(x, y) {
+    this.clicked = false;
     for (let i=0, lim=this.hotspots.length; i<lim; ++i) {
       this.hotspots[i].onClick(x, y);
+      this.clicked = this.clicked || this.hotspots[i].hover;
     }
   }
 

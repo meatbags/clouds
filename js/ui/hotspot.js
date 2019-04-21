@@ -31,7 +31,7 @@ class Hotspot {
   resize() {
     setTimeout(() => {
       this.rect = this.domElement.getBoundingClientRect();
-    }, 50);
+    }, 85);
   }
 
   onMouseMove(x, y) {

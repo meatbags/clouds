@@ -1,5 +1,7 @@
 /** Global config. */
 
+import GetRandomSolutionGrid from './utils/get_random_solution_grid';
+
 const Config = {
   width: 100,
   height: 75,
@@ -19,6 +21,14 @@ const Config = {
   },
   lighting: {
     sunlightDirection: new THREE.Vector3(0, -0.35, 1),
+  },
+  puzzle: {
+    grid: {
+      library: GetRandomSolutionGrid(16, 4),
+      basement: GetRandomSolutionGrid(16, 4),
+      observatory: GetRandomSolutionGrid(16, 4),
+      garden: GetRandomSolutionGrid(16, 4),
+    }
   },
 };
 
