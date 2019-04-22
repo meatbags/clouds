@@ -16,7 +16,7 @@ class Hotspot {
 
     // settings
     this.position = settings.position || (settings.mesh ? settings.mesh.position : new THREE.Vector3());
-    this.radius = settings.radius || 20;
+    this.radius = settings.radius || 5;
     this.clickEvent = settings.clickEvent || (() => {});
     this.timeout = settings.timeout || 150;
     this.mesh = settings.mesh || new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), new THREE.MeshBasicMaterial({color: 0x000}));

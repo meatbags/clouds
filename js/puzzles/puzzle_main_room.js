@@ -10,7 +10,6 @@ class PuzzleMainRoom extends Puzzle {
   constructor(root) {
     super(root);
     this.grid = Config.puzzle.grid;
-    this.printSolution();
 
     // create floor grid
     const group = new THREE.Group();
