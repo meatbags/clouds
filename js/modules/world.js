@@ -25,7 +25,7 @@ class World {
   }
 
   loadModels() {
-    const staticAssets = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map', 'turret']
+    const staticAssets = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map']
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
@@ -52,7 +52,7 @@ class World {
 
         // add
         this.scene.add(obj);
-
+        
         // update loading screen
         this.loadingScreen.onAssetLoaded();
       });

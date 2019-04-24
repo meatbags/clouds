@@ -60,8 +60,18 @@ class PortalHandler {
     from9.setFromCenterAndSize(new THREE.Vector3(-10, -6, 15).add(offset.garden), size.clone());
     to9.setFromCenterAndSize(new THREE.Vector3(-34, 9, 0).add(offset.chapel), size.clone());
 
+    // turret <-> chapel
+    const from10 = new THREE.Box3();
+    const to10 = new THREE.Box3();
+    from10.setFromCenterAndSize(new THREE.Vector3(4, -2, 8).add(offset.turret), size.clone());
+    to10.setFromCenterAndSize(new THREE.Vector3(8, 16, 0).add(offset.chapel), size.clone());
+    const from11 = new THREE.Box3();
+    const to11 = new THREE.Box3();
+    from11.setFromCenterAndSize(new THREE.Vector3(4, 19, 0).add(offset.chapel), size.clone());
+    to11.setFromCenterAndSize(new THREE.Vector3(0, 1, 8).add(offset.turret), size.clone());
+
     // create portals
-    this.portals = [[from1, to1], [from2, to2], [from3, to3], [from4, to4], [from5, to5], [from6, to6], [from7, to7], [from8, to8], [from9, to9]].map(e => {
+    this.portals = [[from1, to1], [from2, to2], [from3, to3], [from4, to4], [from5, to5], [from6, to6], [from7, to7], [from8, to8], [from9, to9], [from10, to10], [from11, to11]].map(e => {
       return (new Portal(e[0], e[1], {
         onTeleport: () => {},
         showBoxes: true,
