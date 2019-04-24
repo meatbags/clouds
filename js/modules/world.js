@@ -25,30 +25,35 @@ class World {
   }
 
   loadModels() {
-    const staticAssets = ['turret', 'floor', 'mobile'];
+    const staticAssets = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map', 'turret']
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
     // load assets and add to scene
     staticAssets.forEach(asset => {
       this.loader.loadFBX(asset).then(obj => {
-        // temp
-        if (asset == 'floor') {
+        // apply position offsets
+        Object.keys(Config.world.offset).forEach(key => {
+          if (asset.indexOf(key) != -1) {
+            const offset = Config.world.offset[key];
+            obj.children.forEach(child => {
+              child.position.add(offset);
+            });
+          }
+        });
+
+        // add collision maps
+        if (asset.indexOf('map') != -1) {
+          console.log(asset);
           this.colliderSystem.add(obj);
           const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
-          obj.children.forEach(child => {
-            child.material = wireMat;
-          });
+          obj.children.forEach(child => { child.material = wireMat; });
         }
 
         // add
         this.scene.add(obj);
 
-        // apply offsets
-        if (Config.world.offset[asset] !== undefined) {
-          obj.position.add(Config.world.offset[asset]);
-        }
-
+        // update loading screen
         this.loadingScreen.onAssetLoaded();
       });
     });

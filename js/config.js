@@ -9,14 +9,13 @@ const Config = {
     startPosition: new THREE.Vector3(0, 1, 0),
   },
   world: {
-    cloudComplexity: 0,
+    cloudComplexity: 2,
     offset: {
-      turret: new THREE.Vector3(4, 17, -8),
-      library: new THREE.Vector3(0, 0, 0),
-      main: new THREE.Vector3(0, 0, 0),
-      observatory: new THREE.Vector3(0, 0, 0),
-      basement: new THREE.Vector3(0, 0, 0),
-      garden: new THREE.Vector3(0, 0, 0),
+      chapel: new THREE.Vector3(0, 0, 0),
+      turret: new THREE.Vector3(100, 0, 0),
+      observatory: new THREE.Vector3(0, 0, 100),
+      basement: new THREE.Vector3(-100, 0, 0),
+      garden: new THREE.Vector3(0, 0, -100),
     }
   },
   lighting: {
