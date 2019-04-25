@@ -12,20 +12,25 @@ class World {
     this.player = player;
     this.colliderSystem = colliderSystem;
 
-    // load
+    // build world
     this.loadSky();
     this.loadModels();
+    this.setLights();
+  }
 
-    // lighting
+  setLights() {
     const directional = new THREE.DirectionalLight(0xffffff, 1);
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.25);
     directional.position.set(0, 0, 0);
     directional.target.position.copy(Config.lighting.sunlightDirection);
-    this.scene.add(ambient, directional, directional.target);
+    const point1 = new THREE.PointLight(0xffffff, 1, 20, 2);
+    point1.position.set(0, 6, 0);
+    point1.position.add(Config.world.offset.turret);
+    this.scene.add(ambient, directional, directional.target, point1);
   }
 
   loadModels() {
-    const staticAssets = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map']
+    const staticAssets = ['turret', 'turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map']
     this.loadingScreen = new LoadingScreen(staticAssets.length);
     this.loader = new Loader('./assets');
 
@@ -44,7 +49,6 @@ class World {
 
         // add collision maps
         if (asset.indexOf('map') != -1) {
-          console.log(asset);
           this.colliderSystem.add(obj);
           const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
           obj.children.forEach(child => { child.material = wireMat; });
@@ -52,7 +56,7 @@ class World {
 
         // add
         this.scene.add(obj);
-        
+
         // update loading screen
         this.loadingScreen.onAssetLoaded();
       });

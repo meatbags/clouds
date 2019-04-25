@@ -6,7 +6,7 @@ const Config = {
   width: 100,
   height: 75,
   player: {
-    startPosition: new THREE.Vector3(0, 1, 0),
+    startPosition: new THREE.Vector3(0, 0, 0),
   },
   world: {
     cloudComplexity: 2,

@@ -10,7 +10,7 @@ class Player {
     this.root = root;
 
     // set position
-    this.position = Config.player.startPosition.clone();
+    this.position = Config.player.startPosition.clone().add(Config.world.offset.turret);
     this.rotation = new THREE.Vector2(Math.PI, 0);
     this.motion = new THREE.Vector3();
     this.target = {
