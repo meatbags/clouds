@@ -63,12 +63,12 @@ class PortalHandler {
     // turret <-> chapel
     const from10 = new THREE.Box3();
     const to10 = new THREE.Box3();
-    from10.setFromCenterAndSize(new THREE.Vector3(4, -2, 8).add(offset.turret), size.clone());
-    to10.setFromCenterAndSize(new THREE.Vector3(8, 16, 0).add(offset.chapel), size.clone());
+    from10.setFromCenterAndSize(new THREE.Vector3(8, -6.5, -2).add(offset.turret), size.clone());
+    to10.setFromCenterAndSize(new THREE.Vector3(16, 14.5, -6).add(offset.chapel), size.clone());
     const from11 = new THREE.Box3();
     const to11 = new THREE.Box3();
-    from11.setFromCenterAndSize(new THREE.Vector3(4, 19, 0).add(offset.chapel), size.clone());
-    to11.setFromCenterAndSize(new THREE.Vector3(0, 1, 8).add(offset.turret), size.clone());
+    from11.setFromCenterAndSize(new THREE.Vector3(16, 17.5, -2).add(offset.chapel), size.clone());
+    to11.setFromCenterAndSize(new THREE.Vector3(8, -3.5, 2).add(offset.turret), size.clone());
 
     // create portals
     this.portals = [[from1, to1], [from2, to2], [from3, to3], [from4, to4], [from5, to5], [from6, to6], [from7, to7], [from8, to8], [from9, to9], [from10, to10], [from11, to11]].map(e => {

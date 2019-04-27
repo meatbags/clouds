@@ -19,8 +19,8 @@ class Renderer {
 
   bind(root) {
     // render passes
-    const strength = 0.5;
-    const radius = 0.125;
+    const strength = 0.2;
+    const radius = 0.0625;
     const threshold = 0.96;
     this.passRender = new THREE.RenderPass(root.logic.scene, root.logic.camera.camera);
     this.passOutline = new THREE.OutlinePass(this.size, root.logic.scene, root.logic.camera.camera);
@@ -32,7 +32,7 @@ class Renderer {
     this.composer = new THREE.EffectComposer(this.renderer);
     this.composer.addPass(this.passRender);
     this.composer.addPass(this.passOutline);
-    //this.composer.addPass(this.passBloom);
+    this.composer.addPass(this.passBloom);
 
     // bind dom events
     this.resize();
