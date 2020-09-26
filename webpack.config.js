@@ -1,37 +1,49 @@
 var path = require('path');
 var webpack = require('webpack');
-
-// modules
 var MiniCssExtract = require("mini-css-extract-plugin");
 var UglifyJs = require("uglifyjs-webpack-plugin");
 var TerserJs = require("terser-webpack-plugin");
 var OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
 
 // path
-var appName = 'clouds';
-var pathJS = './js/main.js';
+var appName = 'GAME';
+var pathJS = './js/app.js';
 var pathSCSS = './scss/main.js';
-var pathOutput = 'build';
+var pathJSOutput = 'build/js';
+var pathCSSOutput = 'build/css';
 
 module.exports = [{
     entry: {'app.min': pathJS},
     output: {
       library: appName,
       libraryTarget: 'var',
-      path: path.resolve(__dirname, pathOutput),
+      path: path.resolve(__dirname, pathJSOutput),
       filename: '[name].js'
     },
     module: {
       rules: [{
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {loader: "babel-loader"}
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {targets: { chrome: 53, ie: 11 }}
+              ]
+            ]
+          }
+        }
       }]
     },
     optimization: {
       minimizer: [
         new TerserJs({
           test: /\.js(\?.*)?$/i,
+          terserOptions: {
+            mangle: true,
+          },
         }),
       ],
     },
@@ -39,7 +51,7 @@ module.exports = [{
   },{
     entry: {'style.webpack': pathSCSS},
     output: {
-      path: path.resolve(__dirname, pathOutput),
+      path: path.resolve(__dirname, pathCSSOutput),
       filename: '[name].js'
     },
     module: {
@@ -49,12 +61,6 @@ module.exports = [{
           MiniCssExtract.loader, {
             loader: 'css-loader',
             options: {importLoaders: 2, sourceMap: true}
-          }, {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [require('autoprefixer')],
-              sourceMap: true
-            }
           }, {
             loader: 'sass-loader',
             options: {sourceMap: true}
