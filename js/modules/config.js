@@ -16,6 +16,7 @@ const Config = {
   },
   Scene: {
     cloudComplexity: 2,
+    sunlightDirection: new THREE.Vector3(0.25, -1, 0.5),
     offset: {
       chapel: new THREE.Vector3(0, 0, 0),
       turret: new THREE.Vector3(100, 0, 0),
@@ -23,9 +24,6 @@ const Config = {
       basement: new THREE.Vector3(-100, 0, 0),
       garden: new THREE.Vector3(0, 0, -100),
     }
-  },
-  lighting: {
-    sunlightDirection: new THREE.Vector3(0, -0.35, 1),
   },
   puzzle: {
     grid: {

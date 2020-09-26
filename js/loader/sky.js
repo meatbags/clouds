@@ -1,9 +1,14 @@
 /** Sky */
 
 import * as THREE from 'three';
+import CloudMaterial from './cloud_material';
 
 class Sky {
-  constructor() {
+  constructor(scene, camera) {
+    this.ref = {};
+    this.ref.camera = camera;
+
+    // skybox
     const shader = {
     	uniforms: {
     		luminance: { value: 1 },
@@ -166,19 +171,36 @@ class Sky {
       uniforms: THREE.UniformsUtils.clone(shader.uniforms),
       side: THREE.BackSide
     });
-    this.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material);
-    this.mesh.scale.setScalar(450000);
+    this.skyMesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material);
+    this.skyMesh.scale.setScalar(450000);
     const d = 400000;
     const azimuth = 0.25;
     const inclination = 0.45;
     const theta = Math.PI * (inclination - 0.5);
     const phi = Math.PI * 2 * (azimuth - 0.5);
     const sunPos = new THREE.Vector3(d * Math.cos(phi), d * Math.sin(phi) * Math.sin(theta), d * Math.sin(phi) * Math.cos(theta));
-    this.mesh.material.uniforms.sunPosition.value.copy(sunPos);
+    this.skyMesh.material.uniforms.sunPosition.value.copy(sunPos);
+    scene.add(this.skyMesh);
+
+    // clouds
+    this.cloudMaterial = CloudMaterial;
+    this.cloudMaterial.side = THREE.BackSide;
+    this.cloudMaterial.transparent = true;
+    this.cloudMaterial.uniforms.uTime.value = Math.random() * 60;
+    this.cloudMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(1, 32, 32), this.cloudMaterial);
+    this.cloudMesh.scale.setScalar(500);
+    this.cloudMesh.rotation.y = Math.random() * Math.PI * 2;
+    //this.cloudMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMaterial);
+    this.cloudMesh.rotation.x = -Math.PI / 2;
+    scene.add(this.cloudMesh);
   }
 
-  getMesh() {
-    return this.mesh;
+  update(delta) {
+    if (this.cloudMaterial) {
+      this.cloudMaterial.uniforms.uTime.value += delta;
+      this.cloudMesh.position.copy(this.ref.camera.position);
+      // this.cloudMesh.position.y -= 40;
+    }
   }
 }
 

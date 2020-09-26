@@ -53,6 +53,7 @@ class Controls {
     this.rotation = {
       pitch: pitch,
       yaw: yaw,
+      modifier: 1.125,
       origin: {pitch: pitch, yaw: yaw},
       target: {pitch: pitch, yaw: yaw},
       cache: {pitch: 0, yaw: 0},
@@ -99,7 +100,7 @@ class Controls {
       // update player rotation
       const dyaw = (this.mouse.delta.x / this.centre.x) * this.rotation.size.yaw;
       const dpitch = (this.mouse.delta.y / this.centre.y) * this.rotation.size.pitch;
-      const yaw = this.rotation.origin.yaw + dyaw;
+      const yaw = this.rotation.origin.yaw + dyaw * this.rotation.modifier;
       const pitch = Clamp(this.rotation.origin.pitch + dpitch, this.minPitch, this.maxPitch);
 
       // reset mouse.y origin is clamped
