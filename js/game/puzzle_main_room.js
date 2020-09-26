@@ -1,10 +1,10 @@
 /** Main puzzle. */
 
-import Config from '../config';
+import Config from '../modules/config';
 import Puzzle from './puzzle';
 import Hotspot from '../ui/hotspot';
-import Tween from '../utils/tween';
-import { PrintGrid } from '../utils/solution_grid.js';
+import Tween from '../util/tween';
+import { PrintGrid } from '../util/solution_grid.js';
 
 class PuzzleMainRoom extends Puzzle {
   constructor(root) {

@@ -1,14 +1,20 @@
 /** Global config. */
 
-import { GetRandomSolutionGrid, GetExclusiveSolutionGrid, MapGrid } from './utils/solution_grid';
+import * as THREE from 'three';
+import { GetRandomSolutionGrid, GetExclusiveSolutionGrid, MapGrid } from '../util/solution_grid';
 
 const Config = {
-  width: 100,
-  height: 75,
-  player: {
-    startPosition: new THREE.Vector3(0, 0, 0),
+  Camera: {
+    fov: 78,
   },
-  world: {
+  Controls: {
+    height: 2,
+    speed: 6,
+    speedNoclip: 30,
+    maxPitch: Math.PI / 8,
+    minPitch: -Math.PI / 8,
+  },
+  Scene: {
     cloudComplexity: 2,
     offset: {
       chapel: new THREE.Vector3(0, 0, 0),

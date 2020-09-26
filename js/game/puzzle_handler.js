@@ -1,6 +1,6 @@
-/** Load and handle puzzles and interaction */
+/** Puzzle logic */
 
-import Config from '../config';
+import Config from '../modules/config';
 import PuzzleMainRoom from './puzzle_main_room';
 
 class PuzzleHandler {

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import * as Maths from './maths';
 import Config from './config';
 
-class ColliderPoint {
+class ColliderObject {
   constructor(settings) {
     this.settings = Config.settings;
     this.position = new THREE.Vector3();
@@ -164,4 +164,4 @@ class ColliderPoint {
   }
 }
 
-export default ColliderPoint;
+export default ColliderObject;

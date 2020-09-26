@@ -1,11 +1,7 @@
 /** Base puzzle class. */
 
 class Puzzle {
-  constructor(root) {
-    this.root = root;
-    this.scene = this.root.scene;
-    this.camera = this.root.camera;
-    this.colliderSystem = this.root.colliderSystem;
+  constructor() {
     this.hotspots = [];
     this.tweens = [];
   }

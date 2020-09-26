@@ -29,19 +29,20 @@ class ColliderSystem {
         obj.children.forEach(child => {
           this.add(child);
         });
+
+      // create new mesh
       } else {
-        // create new mesh
         if (!obj.isColliderMesh && obj.geometry && obj.geometry.isBufferGeometry) {
           obj = new Mesh(obj);
         }
 
-        // check if mesh passes
+        // check if mesh ok
         if (obj.isColliderMesh) {
           if (obj.planes.length < this.maxPlanes) {
             this.meshes.push(obj);
             res = obj;
           } else {
-            console.warn(`Mesh plane count exceeds maximum (${this.maxPlanes})`);
+            console.warn(`[ColliderSystem] Too many planes. Maximum=${this.maxPlanes}`);
           }
         }
       }

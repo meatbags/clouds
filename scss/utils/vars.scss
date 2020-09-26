@@ -5,18 +5,14 @@ $blue: #003153;
 
 // sizing
 $space: 8px;
-$menuSize: 24px;
 
 // height
-$indexCanvas3d: 1;
-$indexCanvas2d: 2;
-$indexMenu: 99;
-$indexMenuButton: 100;
-$indexLoadingScreen: 200;
+$indexCanvas: 1;
+$indexCanvasOverlay: 2;
 
 // animation
-$transition: 0.2s;
-$transitionSlow: 0.4s;
+$transition: 0.35s;
+$transitionSlow: 0.7s;
 
 // style
 $border: 1px solid $white;

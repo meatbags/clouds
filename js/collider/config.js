@@ -8,7 +8,7 @@ const Config = {
   },
   settings: {
     gravity: 10,
-    floor: 0,
+    floor: -20,
     maxVelocity: 50,
     friction: 0.5,
     snapUp: 0.75,

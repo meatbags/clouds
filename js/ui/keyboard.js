@@ -4,18 +4,18 @@ class Keyboard {
   constructor(onEvent) {
     this.keys = {};
     this.onEvent = onEvent;
-    document.addEventListener('keydown', (key) => { this.onKeyDown(key); });
-    document.addEventListener('keyup', (key) => { this.onKeyUp(key); });
+    document.addEventListener('keydown', evt => { this.onKeyDown(evt); });
+    document.addEventListener('keyup', evt => { this.onKeyUp(evt); });
   }
 
-  onKeyDown(key) {
-    this.keys[key.key] = true;
-    this.onEvent(key.key);
+  onKeyDown(evt) {
+    this.keys[evt.key] = true;
+    this.onEvent(evt.key, evt);
   }
 
-  onKeyUp(key) {
-    this.keys[key.key] = false;
-    this.onEvent(key.key);
+  onKeyUp(evt) {
+    this.keys[evt.key] = false;
+    this.onEvent(evt.key, evt);
   }
 
   release(key) {

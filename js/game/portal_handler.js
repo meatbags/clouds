@@ -1,7 +1,7 @@
 /** Load and maintain portals */
 
 import Portal from './portal';
-import Config from '../config';
+import Config from '../modules/config';
 
 class PortalHandler {
   constructor(scene, player) {
@@ -12,7 +12,7 @@ class PortalHandler {
 
   createPortals() {
     const size = new THREE.Vector3(4, 8, 4);
-    const offset = Config.world.offset;
+    const offset = Config.Scene.offset;
 
     // chapel <-> basement
     const from1 = new THREE.Box3();

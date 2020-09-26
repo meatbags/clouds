@@ -2,12 +2,13 @@
   * @author https://github.com/meatbags
   */
 
-import Config from '../../config';
+import Config from '../modules/config';
+import * as THREE from 'three';
 
 const CloudMaterial = new THREE.ShaderMaterial({
 	uniforms: {
   	uTime: { value: 1.0 },
-    uDetailLevel: { value: Config.world.cloudComplexity }, // 1, 2, 3
+    uDetailLevel: { value: Config.Scene.cloudComplexity }, // 1, 2, 3
 	},
 	vertexShader: `
     varying vec2 vUV;

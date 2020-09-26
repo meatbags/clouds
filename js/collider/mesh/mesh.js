@@ -218,7 +218,6 @@ class Mesh {
 
   getIntersectPlane2D(p1, p2) {
     // find 2D intersect *nearest* to p2
-
     const tp1 = this.transform.getTransformedPoint(p1);
     const tp2 = this.transform.getTransformedPoint(p2);
     const box = new THREE.Box3().setFromPoints([tp1, tp2]);
@@ -252,7 +251,6 @@ class Mesh {
 
   getProjected(point, plane) {
     // get point projected onto plane
-
     const p = this.transform.getTransformedPoint(point);
     const proj = plane.getProjected(p);
     return this.transform.getReverseTransformedPoint(proj);

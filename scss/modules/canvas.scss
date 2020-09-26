@@ -1,21 +1,26 @@
-canvas {
+.canvas-wrapper {
   position: absolute;
   top: 0;
   left: 0;
-  margin: 0;
-  padding: 0;
-  cursor: crosshair;
+  width: 100%;
+  height: 100%;
 
-  &.clickable {
-    cursor: pointer;
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    cursor: crosshair;
+    z-index: $indexCanvas;
+
+    &.canvas--overlay {
+      z-index: $indexCanvasOverlay;
+      pointer-events: none;
+    }
+
+    &.clickable {
+      cursor: pointer;
+    }
   }
-}
-
-#canvas-target {
-  z-index: $indexCanvas3d;
-}
-
-#canvas-target-2d {
-  z-index: $indexCanvas2d;
-  pointer-events: none;
 }
