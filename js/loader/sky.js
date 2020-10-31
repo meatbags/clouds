@@ -169,7 +169,7 @@ class Sky {
       fragmentShader: shader.fragmentShader,
       vertexShader: shader.vertexShader,
       uniforms: THREE.UniformsUtils.clone(shader.uniforms),
-      side: THREE.BackSide
+      side: THREE.BackSide,
     });
     this.skyMesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material);
     this.skyMesh.scale.setScalar(450000);

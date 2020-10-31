@@ -13,8 +13,8 @@ class Camera {
     this.camera.rotation.order = 'YXZ';
     this.camera.fov = Config.Camera.fov;
     this.camera.updateProjectionMatrix();
-    this.camera.rotation.x = 0;
-    this.camera.rotation.y = Math.PI / 2;
+    this.camera.rotation.x = Math.PI / 32;
+    this.camera.rotation.y = 0;//Math.PI / 2;
 
     // start position
     this.camera.position.set(100, 0, 0);

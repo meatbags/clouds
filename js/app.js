@@ -6,6 +6,7 @@ import HUD from './modules/hud';
 import Loop from './modules/loop';
 import Renderer from './modules/renderer';
 import Scene from './modules/scene';
+import Materials from './modules/materials';
 
 class App {
   constructor() {
@@ -16,6 +17,7 @@ class App {
       loop: new Loop(),
       renderer: new Renderer(),
       scene: new Scene(),
+      materials: new Materials(),
     };
 
     // bind modules

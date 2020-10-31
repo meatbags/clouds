@@ -130,7 +130,7 @@ const CloudMaterial = new THREE.ShaderMaterial({
       float alpha = 1.0 - min(1.0, sqrt(pow(0.5 - vUV.x, 2.0) + pow(0.5 - vUV.y, 2.0)) / 0.5);
       gl_FragColor = vec4(colour + prussian + light * 0.5, colour.x * alpha);
     }
-  `
+  `,
 });
 
 export default CloudMaterial;

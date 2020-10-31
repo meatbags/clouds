@@ -16,6 +16,7 @@ class Scene {
   bind(root) {
     this.ref = {};
     this.ref.camera = root.modules.camera;
+    this.ref.materials = root.modules.materials;
 
     // load scene
     this.initMap();
@@ -71,6 +72,9 @@ class Scene {
             applyToMeshes(obj, mesh => { mesh.position.add(offset); });
           }
         });
+
+        // update materials
+        this.ref.materials.processObject(obj);
 
         // add to scene
         this.scene.add(obj);
