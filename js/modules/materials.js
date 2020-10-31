@@ -38,7 +38,7 @@ class Materials {
 
     // material-specific settings
     if (mat.name === 'fabric') {
-      mat.side = THREE.DoubleSide;
+    //  mat.side = THREE.DoubleSide;
       mat.alphaMap = mat.map;
       mat.transparent = true;
     }
@@ -62,11 +62,11 @@ class Materials {
       vertexShader = `
         float t = time * 0.25;
         vec3 p = position;
-        float x = (p.x + t) * 2.0;
+        float z = (p.z + t) * 2.0;
         float y = (p.y + t) * 0.5;
-        float pz = perlinNoise(vec2(x, y)) * 0.25;
-        float pz_scale = clamp((5.0 - p.y) / 5.0, 0.0, 1.0);
-        vec3 transformed = vec3(p.x, p.y, p.z + pz * pz_scale);
+        float n = perlinNoise(vec2(z, y)) * 0.25;
+        float n_scale = clamp((5.0 - p.y) / 5.0, 0.0, 1.0);
+        vec3 transformed = vec3(p.x + n * n_scale, p.y, p.z);
         // vNormal = vNormal * pz;
       `;
     }

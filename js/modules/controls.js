@@ -14,11 +14,12 @@ class Controls {
   constructor() {
     this.active = true;
     this.blendPosition = 0.25;
-    this.blendRotation = 0.125;
+    this.blendRotation = 0.2;
     this.maxPitch = Config.Controls.maxPitch;
     this.minPitch = Config.Controls.minPitch;
     this.height = Config.Controls.height;
     this.speed = Config.Controls.speed;
+    this.speedShift = Config.Controls.speedShift;
     this.speedNoclip = Config.Controls.speedNoclip;
     this.keys = {up: false, down: false, left: false, right: false, jump: false, noclip: false};
     this.domTarget = document.querySelector('#canvas-target');
@@ -191,7 +192,10 @@ class Controls {
 
     // handle direction keys
     if (this.keys.up || this.keys.down || this.keys.left || this.keys.right) {
-      const speed = (this.keys.noclip) ? this.speedNoclip * (1 - Math.abs(Math.sin(this.rotation.pitch))) : this.speed;
+      let speed = this.keyboard.isShift() ? this.speedShift : this.speed;
+      if (this.keys.noclip) {
+        speed = this.speedNoclip * (1 - Math.abs(Math.sin(this.rotation.pitch)));
+      }
       const ws = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
       const ad = ((this.keys.left) ? 1 : 0) + ((this.keys.right) ? -1 : 0);
       const scale = ws != 0 && ad != 0 ? 0.7071 : 1;

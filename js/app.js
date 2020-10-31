@@ -7,6 +7,7 @@ import Loop from './modules/loop';
 import Renderer from './modules/renderer';
 import Scene from './modules/scene';
 import Materials from './modules/materials';
+import Geometry from './modules/geometry';
 
 class App {
   constructor() {
@@ -18,6 +19,7 @@ class App {
       renderer: new Renderer(),
       scene: new Scene(),
       materials: new Materials(),
+      geometry: new Geometry(),
     };
 
     // bind modules

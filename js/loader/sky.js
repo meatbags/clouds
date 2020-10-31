@@ -188,9 +188,8 @@ class Sky {
     this.cloudMaterial.transparent = true;
     this.cloudMaterial.uniforms.uTime.value = Math.random() * 60;
     this.cloudMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(1, 32, 32), this.cloudMaterial);
-    this.cloudMesh.scale.setScalar(500);
+    this.cloudMesh.scale.setScalar(10000);
     this.cloudMesh.rotation.y = Math.random() * Math.PI * 2;
-    //this.cloudMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1500, 2000), this.cloudMaterial);
     this.cloudMesh.rotation.x = -Math.PI / 2;
     scene.add(this.cloudMesh);
   }
@@ -199,7 +198,6 @@ class Sky {
     if (this.cloudMaterial) {
       this.cloudMaterial.uniforms.uTime.value += delta;
       this.cloudMesh.position.copy(this.ref.camera.position);
-      // this.cloudMesh.position.y -= 40;
     }
   }
 }

@@ -9,7 +9,8 @@ const Config = {
   },
   Controls: {
     height: 2,
-    speed: 6,
+    speed: 3,
+    speedShift: 6,
     speedNoclip: 30,
     maxPitch: Math.PI / 8,
     minPitch: -Math.PI / 8,

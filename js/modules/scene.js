@@ -17,11 +17,15 @@ class Scene {
     this.ref = {};
     this.ref.camera = root.modules.camera;
     this.ref.materials = root.modules.materials;
+    this.ref.geometry = root.modules.geometry;
 
     // load scene
-    this.initMap();
+    this.initMap()
+      .then(() => {
+        // add sky
+        this.sky = new Sky(this.scene, this.ref.camera.getCamera());
+      });
     this.initLighting();
-    this.initSky();
   }
 
   initLighting() {
@@ -48,63 +52,73 @@ class Scene {
   }
 
   initMap() {
-    const maps = ['turret'];
-    const collisionMaps = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map'];
+    return new Promise((resolve, reject) => {
+      const maps = ['turret'];
+      const collisionMaps = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map'];
+      let toLoad = maps.length + collisionMaps.length;
 
-    // apply callback to nested meshes
-    const applyToMeshes = (obj, callback) => {
-      if (obj.type === 'Mesh') {
-        callback(obj);
-      } else if (obj.children) {
-        obj.children.forEach(child => {
-          applyToMeshes(child, callback);
+      // onload callback
+      const onLoad = () => {
+        toLoad -= 1;
+        if (toLoad == 0) {
+          resolve();
+        }
+      };
+
+      // apply callback to nested meshes
+      const applyToMeshes = (obj, callback) => {
+        if (obj.type === 'Mesh') {
+          callback(obj);
+        } else if (obj.children) {
+          obj.children.forEach(child => {
+            applyToMeshes(child, callback);
+          });
+        }
+      };
+
+      // load maps
+      maps.forEach(name => {
+        this.loader.loadFBX(name).then(obj => {
+          // apply position offsets
+          Object.keys(Config.Scene.offset).forEach(key => {
+            if (name.indexOf(key) != -1) {
+              const offset = Config.Scene.offset[key];
+              applyToMeshes(obj, mesh => { mesh.position.add(offset); });
+            }
+          });
+
+          // update object
+          this.ref.materials.processObject(obj);
+          this.ref.geometry.processObject(obj);
+
+          // add to scene
+          this.scene.add(obj);
+          onLoad();
         });
-      }
-    };
+      });
 
-    // load maps
-    maps.forEach(name => {
-      this.loader.loadFBX(name).then(obj => {
-        // apply position offsets
-        Object.keys(Config.Scene.offset).forEach(key => {
-          if (name.indexOf(key) != -1) {
-            const offset = Config.Scene.offset[key];
-            applyToMeshes(obj, mesh => { mesh.position.add(offset); });
-          }
+      // load collision maps
+      collisionMaps.forEach(name => {
+        this.loader.loadFBX(name).then(obj => {
+          // apply position offsets
+          Object.keys(Config.Scene.offset).forEach(key => {
+            if (name.indexOf(key) != -1) {
+              const offset = Config.Scene.offset[key];
+              applyToMeshes(obj, mesh => { mesh.position.add(offset); });
+            }
+          });
+
+          // add collision maps
+          this.colliderSystem.add(obj);
+          const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
+          applyToMeshes(obj, mesh => { mesh.material = wireMat; });
+
+          // add to scene
+          this.scene.add(obj);
+          onLoad();
         });
-
-        // update materials
-        this.ref.materials.processObject(obj);
-
-        // add to scene
-        this.scene.add(obj);
       });
     });
-
-    // load collision maps
-    collisionMaps.forEach(name => {
-      this.loader.loadFBX(name).then(obj => {
-        // apply position offsets
-        Object.keys(Config.Scene.offset).forEach(key => {
-          if (name.indexOf(key) != -1) {
-            const offset = Config.Scene.offset[key];
-            applyToMeshes(obj, mesh => { mesh.position.add(offset); });
-          }
-        });
-
-        // add collision maps
-        this.colliderSystem.add(obj);
-        const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
-        applyToMeshes(obj, mesh => { mesh.material = wireMat; });
-
-        // add to scene
-        this.scene.add(obj);
-      });
-    });
-  }
-
-  initSky() {
-    this.sky = new Sky(this.scene, this.ref.camera.getCamera());
   }
 
   getScene() {
@@ -116,7 +130,9 @@ class Scene {
   }
 
   update(delta) {
-    this.sky.update(delta);
+    if (this.sky) {
+      this.sky.update(delta);
+    }
   }
 }
 

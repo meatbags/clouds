@@ -29,7 +29,8 @@ class Player {
     });
 
     // physical attributes
-    this.speed = 6;
+    this.speed = 3;
+    this.shiftSpeed = 6;
     this.rotationSpeed = Math.PI * 0.5;
     this.jump = 8;
     this.jumpSpeedMultiplier = 0.25;
