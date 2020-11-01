@@ -114,7 +114,7 @@ class Scene {
           applyToMeshes(obj, mesh => { mesh.material = wireMat; });
 
           // add to scene
-          this.scene.add(obj);
+          // this.scene.add(obj);
           onLoad();
         });
       });
