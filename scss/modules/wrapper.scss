@@ -10,5 +10,13 @@
     position: relative;
     width: 100%;
     height: 100%;
+
+    .wrapper__title {
+      @include padding(2, 1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: $indexCanvas + 1;
+    }
   }
 }

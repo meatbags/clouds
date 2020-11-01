@@ -43,6 +43,7 @@ class Materials {
     } else if (mat.name === 'plastic_wrapper') {
       mat.transparent = true;
       mat.alphaMap = mat.metalnessMap;
+      mat.side = THREE.DoubleSide;
     }
   }
 
