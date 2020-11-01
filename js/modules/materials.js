@@ -38,9 +38,11 @@ class Materials {
 
     // material-specific settings
     if (mat.name === 'fabric') {
-    //  mat.side = THREE.DoubleSide;
       mat.alphaMap = mat.map;
       mat.transparent = true;
+    } else if (mat.name === 'plastic_wrapper') {
+      mat.transparent = true;
+      mat.alphaMap = mat.metalnessMap;
     }
   }
 
