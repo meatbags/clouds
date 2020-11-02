@@ -20,7 +20,7 @@ const Config = {
     sunlightDirection: new THREE.Vector3(0.25, -1, 0.5),
     offset: {
       chapel: new THREE.Vector3(0, 0, 0),
-      turret: new THREE.Vector3(100, 0, 0),
+      sculptors_loft: new THREE.Vector3(100, 0, 0),
       observatory: new THREE.Vector3(0, 0, 100),
       basement: new THREE.Vector3(-100, 0, 0),
       garden: new THREE.Vector3(0, 0, -100),

@@ -53,8 +53,16 @@ class Scene {
 
   initMap() {
     return new Promise((resolve, reject) => {
-      const maps = ['turret'];
-      const collisionMaps = ['turret_map', 'chapel_map', 'basement_map', 'observatory_map', 'garden_map'];
+      const maps = [
+        'sculptors_loft'
+      ];
+      const collisionMaps = [
+        'sculptors_loft_collision_map',
+        'chapel_map',
+        'basement_map',
+        'observatory_map',
+        'garden_map'
+      ];
       let toLoad = maps.length + collisionMaps.length;
 
       // onload callback

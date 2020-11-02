@@ -14,10 +14,10 @@ class Camera {
     this.camera.fov = Config.Camera.fov;
     this.camera.updateProjectionMatrix();
     this.camera.rotation.x = Math.PI / 32;
-    this.camera.rotation.y = 0;//Math.PI / 2;
+    this.camera.rotation.y = 0;
 
     // start position
-    this.camera.position.set(100, 0, 0);
+    this.camera.position.set(100, 0, 4);
 
     // audio listener
     this.listener = new THREE.AudioListener();
