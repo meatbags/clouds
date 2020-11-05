@@ -1,18 +1,15 @@
-/** Teleport player */
+/** Portal */
+
+import * as THREE from 'three';
 
 class Portal {
   constructor(from, to, settings) {
     // settings
     this.from = from;
     this.to = to;
-    this.onTeleport = settings.onTeleport || null;
-    if (settings.showBoxes && settings.scene) {
-      const helper1 = new THREE.Box3Helper(this.from, 0xffffff);
-      const helper2 = new THREE.Box3Helper(this.to, 0xffffff);
-      settings.scene.add(helper1, helper2);
-    }
+    this.callback = settings.callback || null;
 
-    // set delta
+    // get portal delta
     this.delta = new THREE.Vector3();
     const a = new THREE.Vector3();
     const b = new THREE.Vector3();
@@ -22,18 +19,21 @@ class Portal {
     this.delta.copy(b);
   }
 
-  teleport(player) {
-    player.position.add(this.delta);
-    player.target.position.add(this.delta);
-
-    if (this.onTeleport) {
-      this.onTeleport();
-    }
+  addHelpers(scene) {
+    const helper1 = new THREE.Box3Helper(this.from, 0xffffff);
+    const helper2 = new THREE.Box3Helper(this.to, 0xffffff);
+    scene.add(helper1, helper2);
   }
 
-  update(player) {
-    if (this.from.containsPoint(player.position)) {
-      this.teleport(player);
+  update(camera, controls) {
+    if (this.from.containsPoint(camera.position)) {
+      camera.position.add(this.delta);
+      controls.position.add(this.delta);
+      controls.positionTarget.add(this.delta);
+
+      if (this.callback) {
+        this.callback(this);
+      }
     }
   }
 }

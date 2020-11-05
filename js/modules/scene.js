@@ -11,6 +11,7 @@ class Scene {
     this.scene = new THREE.Scene();
     this.loader = new Loader('./assets/');
     this.colliderSystem = new ColliderSystem();
+    this.room = {};
   }
 
   bind(root) {
@@ -18,12 +19,16 @@ class Scene {
     this.ref.camera = root.modules.camera;
     this.ref.materials = root.modules.materials;
     this.ref.geometry = root.modules.geometry;
+    this.ref.puzzleHandler = root.modules.puzzleHandler;
 
     // load scene
     this.initMap()
       .then(() => {
         // add sky
         this.sky = new Sky(this.scene, this.ref.camera.getCamera());
+
+        // init puzzles
+        this.ref.puzzleHandler.initPuzzles();
       });
     this.initLighting();
   }
@@ -101,6 +106,7 @@ class Scene {
 
           // add to scene
           this.scene.add(obj);
+          this.room[name] = obj;
           onLoad();
         });
       });
@@ -122,11 +128,21 @@ class Scene {
           applyToMeshes(obj, mesh => { mesh.material = wireMat; });
 
           // add to scene
-          // this.scene.add(obj);
+          this.scene.add(obj);
           onLoad();
         });
       });
     });
+  }
+
+  showRoom(name) {
+    Object.keys(this.room).forEach(key => {
+      this.room[key].visible = key === name;
+    });
+  }
+
+  isRoomVisible(name) {
+    return this.room[key] !== undefined && this.room[key].visible;
   }
 
   getScene() {

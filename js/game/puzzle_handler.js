@@ -1,48 +1,27 @@
-/** Puzzle logic */
+/** Puzzle Handler */
 
-import Config from '../modules/config';
-import PuzzleMainRoom from './puzzle_main_room';
+import * as THREE from 'three';
+import ChessPuzzle from './chess_puzzle';
 
 class PuzzleHandler {
-  constructor(scene, camera, colliderSystem) {
-    this.scene = scene;
-    this.camera = camera;
-    this.colliderSystem = colliderSystem;
+  constructor() {
     this.puzzles = [];
-    this.domElement = document.querySelector('#canvas-target');
-
-    // load puzzles
-    this.puzzles.push(new PuzzleMainRoom(this));
   }
 
-  onMouseMove(x, y) {
-    let res = false;
-    for (let i=0, lim=this.puzzles.length; i<lim; ++i) {
-      res = res || this.puzzles[i].onMouseMove(x, y);
-    }
-
-    this.domElement.classList[res ? 'add' : 'remove']('clickable');
+  bind(root) {
+    this.ref = {};
+    this.ref.scene = root.modules.scene;
+    this.ref.camera = root.modules.camera;
   }
 
-  onClick(x, y) {
-    for (let i=0, lim=this.puzzles.length; i<lim; ++i) {
-      this.puzzles[i].onClick(x, y);
-    }
+  initPuzzles() {
+    this.puzzles.push(new ChessPuzzle(this.ref.scene, this.ref.camera));
   }
 
   update(delta) {
-    // clear selected
-    this.outlinePassTarget.selectedObjects = [];
-    for (let i=0, lim=this.puzzles.length; i<lim; ++i) {
-      this.puzzles[i].update(delta);
-      this.outlinePassTarget.selectedObjects = this.outlinePassTarget.selectedObjects.concat(this.puzzles[i].getSelectedMeshes());
-    }
-  }
-
-  draw(ctx) {}
-
-  setOutlinePassTarget(target) {
-    this.outlinePassTarget = target;
+    this.puzzles.forEach(puzzle => {
+      puzzle.update(delta);
+    });
   }
 }
 

@@ -8,6 +8,8 @@ import Renderer from './modules/renderer';
 import Scene from './modules/scene';
 import Materials from './modules/materials';
 import Geometry from './modules/geometry';
+import PuzzleHandler from './game/puzzle_handler';
+import PortalHandler from './game/portal_handler';
 
 class App {
   constructor() {
@@ -20,6 +22,8 @@ class App {
       scene: new Scene(),
       materials: new Materials(),
       geometry: new Geometry(),
+      portalHandler: new PortalHandler(),
+      puzzleHandler: new PuzzleHandler(),
     };
 
     // bind modules

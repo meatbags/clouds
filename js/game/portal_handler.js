@@ -1,12 +1,21 @@
 /** Load and maintain portals */
 
-import Portal from './portal';
+import * as THREE from 'three';
 import Config from '../modules/config';
+import Portal from './portal';
 
 class PortalHandler {
-  constructor(scene, player) {
-    this.scene = scene;
-    this.player = player;
+  constructor() {
+    this.portals = [];
+  }
+
+  bind(root) {
+    this.ref = {};
+    this.ref.scene = root.modules.scene;
+    this.ref.camera = root.modules.camera.getCamera();
+    this.ref.controls = root.modules.controls;
+
+    // init portals
     this.createPortals();
   }
 
@@ -60,29 +69,34 @@ class PortalHandler {
     from9.setFromCenterAndSize(new THREE.Vector3(-10, -6, 15).add(offset.garden), size.clone());
     to9.setFromCenterAndSize(new THREE.Vector3(-34, 9, 0).add(offset.chapel), size.clone());
 
-    // turret <-> chapel
+    // Sculptor's Loft -> Fulcrum Chamber
     const from10 = new THREE.Box3();
     const to10 = new THREE.Box3();
-    from10.setFromCenterAndSize(new THREE.Vector3(8, -6.5, -2).add(offset.turret), size.clone());
+    from10.setFromCenterAndSize(new THREE.Vector3(8, -6.5, -2).add(offset.sculptors_loft), size.clone());
     to10.setFromCenterAndSize(new THREE.Vector3(16, 14.5, -6).add(offset.chapel), size.clone());
     const from11 = new THREE.Box3();
     const to11 = new THREE.Box3();
     from11.setFromCenterAndSize(new THREE.Vector3(16, 17.5, -2).add(offset.chapel), size.clone());
-    to11.setFromCenterAndSize(new THREE.Vector3(8, -3.5, 2).add(offset.turret), size.clone());
+    to11.setFromCenterAndSize(new THREE.Vector3(8, -3.5, 2).add(offset.sculptors_loft), size.clone());
+    const portal10 = new Portal(from10, to10, { callback: () => { this.ref.scene.showRoom('fulcrum_chamber'); } });
+    const portal11 = new Portal(from11, to11, { callback: () => { this.ref.scene.showRoom('sculptors_loft'); } });
+    portal10.addHelpers(this.ref.scene.getScene());
+    portal11.addHelpers(this.ref.scene.getScene());
+    this.portals.push(portal10);
+    this.portals.push(portal11);
 
     // create portals
-    this.portals = [[from1, to1], [from2, to2], [from3, to3], [from4, to4], [from5, to5], [from6, to6], [from7, to7], [from8, to8], [from9, to9], [from10, to10], [from11, to11]].map(e => {
-      return (new Portal(e[0], e[1], {
-        onTeleport: () => {},
-        showBoxes: true,
-        scene: this.scene,
-      }));
+    const portalList = [[from1, to1], [from2, to2], [from3, to3], [from4, to4], [from5, to5], [from6, to6], [from7, to7], [from8, to8], [from9, to9]];
+    portalList.forEach(e => {
+      const portal = new Portal(e[0], e[1], { callback: null });
+      portal.addHelpers(this.ref.scene.getScene());
+      this.portals.push(portal);
     });
   }
 
   update() {
     for (let i=0, lim=this.portals.length; i<lim; ++i) {
-      this.portals[i].update(this.player);
+      this.portals[i].update(this.ref.camera, this.ref.controls);
     }
   }
 }

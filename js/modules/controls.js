@@ -23,11 +23,11 @@ class Controls {
     this.speedNoclip = Config.Controls.speedNoclip;
     this.keys = {up: false, down: false, left: false, right: false, jump: false, noclip: false};
     this.domTarget = document.querySelector('#canvas-target');
-    this.position = {
-      x: 0, y: 0, z: 0,
-      target: new THREE.Vector3(),
-      motion: new THREE.Vector3(),
-    };
+
+    // position containers
+    this.position = new THREE.Vector3();
+    this.positionTarget = new THREE.Vector3();
+    this.motion = new THREE.Vector3();
   }
 
   bind(root) {
@@ -39,12 +39,12 @@ class Controls {
     this.position.x = this.ref.camera.position.x;
     this.position.y = this.ref.camera.position.y;
     this.position.z = this.ref.camera.position.z;
-    this.position.target.copy(this.ref.camera.position);
+    this.positionTarget.copy(this.ref.camera.position);
 
     // collider
     this.collider = new ColliderObject({
-      position: this.position.target,
-      motion: this.position.motion,
+      position: this.positionTarget,
+      motion: this.motion,
       system: this.ref.scene.getColliderSystem(),
     });
 
@@ -199,20 +199,20 @@ class Controls {
       const ws = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
       const ad = ((this.keys.left) ? 1 : 0) + ((this.keys.right) ? -1 : 0);
       const scale = ws != 0 && ad != 0 ? 0.7071 : 1;
-      this.position.motion.x = (Math.sin(this.rotation.yaw) * speed * ws + Math.sin(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
-      this.position.motion.z = (Math.cos(this.rotation.yaw) * speed * ws + Math.cos(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
+      this.motion.x = (Math.sin(this.rotation.yaw) * speed * ws + Math.sin(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
+      this.motion.z = (Math.cos(this.rotation.yaw) * speed * ws + Math.cos(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
     } else {
-      this.position.motion.x = 0;
-      this.position.motion.z = 0;
+      this.motion.x = 0;
+      this.motion.z = 0;
     }
 
     // noclip
     if (this.keys.noclip) {
       if (this.keys.up || this.keys.down) {
         const d = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
-        this.position.motion.y = Math.sin(this.rotation.target.pitch) * d * this.speedNoclip;
+        this.motion.y = Math.sin(this.rotation.target.pitch) * d * this.speedNoclip;
       } else {
-        this.position.motion.y = 0;
+        this.motion.y = 0;
       }
     }
 
@@ -220,13 +220,13 @@ class Controls {
     if (!this.keys.noclip) {
       this.collider.collide(delta);
     } else {
-      this.position.target.x += this.position.motion.x * delta;
-      this.position.target.y += this.position.motion.y * delta;
-      this.position.target.z += this.position.motion.z * delta;
+      this.positionTarget.x += this.motion.x * delta;
+      this.positionTarget.y += this.motion.y * delta;
+      this.positionTarget.z += this.motion.z * delta;
     }
-    this.position.x = Blend(this.position.x, this.position.target.x, this.blendPosition);
-    this.position.y = Blend(this.position.y, this.position.target.y, this.blendPosition);
-    this.position.z = Blend(this.position.z, this.position.target.z, this.blendPosition);
+    this.position.x = Blend(this.position.x, this.positionTarget.x, this.blendPosition);
+    this.position.y = Blend(this.position.y, this.positionTarget.y, this.blendPosition);
+    this.position.z = Blend(this.position.z, this.positionTarget.z, this.blendPosition);
 
     // set position
     this.ref.camera.position.x = this.position.x;
