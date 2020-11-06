@@ -77,10 +77,20 @@ class Mouse {
   }
 
   onMouseUp(evt) {
-    this.active = false;
-    if (this.onMouseUpCallback) {
-      this.onMouseUpCallback(evt);
+    if (this.active) {
+      this.active = false;
+      if (this.onMouseUpCallback) {
+        this.onMouseUpCallback(evt);
+      }
     }
+  }
+
+  isDown() {
+    return this.active;
+  }
+
+  getDeltaMagnitude() {
+    return Math.hypot(this.delta.x, this.delta.y);
   }
 
   resize() {

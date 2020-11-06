@@ -14,6 +14,14 @@
     cursor: crosshair;
     z-index: $indexCanvas;
 
+    &[data-cursor='zoom-in'] {
+      cursor: zoom-in;
+    }
+
+    &[data-cursor='pointer'] {
+      cursor: pointer;
+    }
+
     &.canvas--overlay {
       z-index: $indexCanvasOverlay;
       pointer-events: none;

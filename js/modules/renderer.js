@@ -12,6 +12,7 @@ class Renderer {
     this.renderer.setClearColor(0xececfc, 1);
 
     // add to doc
+    this.renderer.domElement.classList.add('canvas--3d');
     document.querySelector('#canvas-target').appendChild(this.renderer.domElement);
   }
 

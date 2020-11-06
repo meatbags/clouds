@@ -176,6 +176,10 @@ body {
     padding: 0;
     cursor: crosshair;
     z-index: 1; }
+    .canvas-wrapper canvas[data-cursor='zoom-in'] {
+      cursor: zoom-in; }
+    .canvas-wrapper canvas[data-cursor='pointer'] {
+      cursor: pointer; }
     .canvas-wrapper canvas.canvas--overlay {
       z-index: 2;
       pointer-events: none; }
