@@ -16,7 +16,11 @@ class Animation {
   }
 
   getEasing(t) {
-    if (this.easing === 'ease-in-and-out') {
+    if (this.easing === 'ease-in') {
+      return t * t;
+    } else if (this.easing === 'ease-out') {
+      return t + (t - t * t);
+    } else if (this.easing === 'ease-in-and-out') {
       return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
     }
     return t;

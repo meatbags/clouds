@@ -142,7 +142,7 @@ class Scene {
   }
 
   isRoomVisible(name) {
-    return this.room[key] !== undefined && this.room[key].visible;
+    return this.room[name] !== undefined && this.room[name].visible;
   }
 
   getScene() {

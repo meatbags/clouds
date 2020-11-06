@@ -13,6 +13,8 @@ import Keyboard from '../ui/keyboard';
 class Controls {
   constructor() {
     this.active = true;
+
+    // settings
     this.blendPosition = 0.25;
     this.blendRotation = 0.2;
     this.maxPitch = Config.Controls.maxPitch;
@@ -75,6 +77,10 @@ class Controls {
   }
 
   onMouseDown(evt) {
+    if (!this.active) {
+      return;
+    }
+
     // calculate working area
     const rect = this.domTarget.getBoundingClientRect();
     this.centre = {x: rect.width / 2, y: rect.height / 2,};
@@ -97,7 +103,7 @@ class Controls {
   }
 
   onMouseMove(evt) {
-    if (this.mouse.active) {
+    if (this.active && this.mouse.active) {
       // update player rotation
       const dyaw = (this.mouse.delta.x / this.centre.x) * this.rotation.size.yaw;
       const dpitch = (this.mouse.delta.y / this.centre.y) * this.rotation.size.pitch;
@@ -117,6 +123,10 @@ class Controls {
   }
 
   onMouseUp(evt) {
+    if (!this.active) {
+      return;
+    }
+
     const dt = performance.now() - this.timestamp;
     const dx = Math.hypot(this.mouse.delta.x, this.mouse.delta.y);
     if (dt < this.clickThreshold && dx < window.innerWidth * this.threshold.mouseDelta) {
@@ -186,44 +196,44 @@ class Controls {
   }
 
   update(delta) {
-    if (!this.active) {
-      return;
-    }
-
-    // handle direction keys
-    if (this.keys.up || this.keys.down || this.keys.left || this.keys.right) {
-      let speed = this.keyboard.isShift() ? this.speedShift : this.speed;
-      if (this.keys.noclip) {
-        speed = this.speedNoclip * (1 - Math.abs(Math.sin(this.rotation.pitch)));
-      }
-      const ws = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
-      const ad = ((this.keys.left) ? 1 : 0) + ((this.keys.right) ? -1 : 0);
-      const scale = ws != 0 && ad != 0 ? 0.7071 : 1;
-      this.motion.x = (Math.sin(this.rotation.yaw) * speed * ws + Math.sin(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
-      this.motion.z = (Math.cos(this.rotation.yaw) * speed * ws + Math.cos(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
-    } else {
-      this.motion.x = 0;
-      this.motion.z = 0;
-    }
-
-    // noclip
-    if (this.keys.noclip) {
-      if (this.keys.up || this.keys.down) {
-        const d = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
-        this.motion.y = Math.sin(this.rotation.target.pitch) * d * this.speedNoclip;
+    if (this.active) {
+      // handle direction keys
+      if (this.keys.up || this.keys.down || this.keys.left || this.keys.right) {
+        let speed = this.keyboard.isShift() ? this.speedShift : this.speed;
+        if (this.keys.noclip) {
+          speed = this.speedNoclip * (1 - Math.abs(Math.sin(this.rotation.pitch)));
+        }
+        const ws = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
+        const ad = ((this.keys.left) ? 1 : 0) + ((this.keys.right) ? -1 : 0);
+        const scale = ws != 0 && ad != 0 ? 0.7071 : 1;
+        this.motion.x = (Math.sin(this.rotation.yaw) * speed * ws + Math.sin(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
+        this.motion.z = (Math.cos(this.rotation.yaw) * speed * ws + Math.cos(this.rotation.yaw + Math.PI / 2) * speed * ad) * scale * -1;
       } else {
-        this.motion.y = 0;
+        this.motion.x = 0;
+        this.motion.z = 0;
+      }
+
+      // noclip
+      if (this.keys.noclip) {
+        if (this.keys.up || this.keys.down) {
+          const d = ((this.keys.up) ? 1 : 0) + ((this.keys.down) ? -1 : 0);
+          this.motion.y = Math.sin(this.rotation.target.pitch) * d * this.speedNoclip;
+        } else {
+          this.motion.y = 0;
+        }
+      }
+
+      // apply motion to collider
+      if (!this.keys.noclip) {
+        this.collider.collide(delta);
+      } else {
+        this.positionTarget.x += this.motion.x * delta;
+        this.positionTarget.y += this.motion.y * delta;
+        this.positionTarget.z += this.motion.z * delta;
       }
     }
 
-    // apply motion to collider
-    if (!this.keys.noclip) {
-      this.collider.collide(delta);
-    } else {
-      this.positionTarget.x += this.motion.x * delta;
-      this.positionTarget.y += this.motion.y * delta;
-      this.positionTarget.z += this.motion.z * delta;
-    }
+    // update position
     this.position.x = Blend(this.position.x, this.positionTarget.x, this.blendPosition);
     this.position.y = Blend(this.position.y, this.positionTarget.y, this.blendPosition);
     this.position.z = Blend(this.position.z, this.positionTarget.z, this.blendPosition);

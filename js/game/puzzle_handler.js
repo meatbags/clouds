@@ -14,6 +14,8 @@ class PuzzleHandler {
     this.ref = {};
     this.ref.scene = root.modules.scene;
     this.ref.camera = root.modules.camera;
+    this.ref.controls = root.modules.controls;
+    this.ref.animationHandler = root.modules.animationHandler;
     this.ref.domTarget = document.querySelector('.canvas--3d');
     this.ref.domTarget.addEventListener('mousemove', evt => { this.onMouseMove(evt); });
     this.mouse = new Mouse({
@@ -28,11 +30,15 @@ class PuzzleHandler {
 
   onMouseMove(evt) {
     if (!this.mouse.isDown()) {
+      let res = false;
       this.puzzles.forEach(puzzle => {
         const x = evt.clientX;
         const y = evt.clientY;
-        puzzle.onMouseMove(x, y);
+        res = puzzle.onMouseMove(x, y) || res;
       });
+      if (!res) {
+        this.ref.domTarget.dataset.cursor = '';
+      }
     }
   }
 
@@ -41,19 +47,13 @@ class PuzzleHandler {
       this.puzzles.forEach(puzzle => {
         const x = evt.clientX;
         const y = evt.clientY;
-        puzzle.onMouseDown(x, y);
+        puzzle.onClick(x, y);
       });
     }
   }
 
   initPuzzles() {
-    this.puzzles.push(new ChessPuzzle(this.ref.scene, this.ref.camera));
-  }
-
-  update(delta) {
-    this.puzzles.forEach(puzzle => {
-      puzzle.update(delta);
-    });
+    this.puzzles.push(new ChessPuzzle(this));
   }
 }
 
