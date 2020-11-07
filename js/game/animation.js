@@ -1,5 +1,7 @@
 /** Animation */
 
+import MinAngleBetween from '../util/min_angle_between';
+
 class Animation {
   constructor(params) {
     this.duration = params.duration || 1;
@@ -11,6 +13,7 @@ class Animation {
     this.easing = params.easing || 'linear';
     this.isVector2 = this.object[this.var].isVector2 || false;
     this.isVector3 = this.object[this.var].isVector3 || false;
+    this.isAngle = params.isAngle || false;
     this.age = 0;
     this.complete = false;
   }
@@ -51,7 +54,11 @@ class Animation {
 
       // animate single value
       } else {
-        this.object[this.var] = this.from + t * (this.to - this.from);
+        if (this.isAngle) {
+          this.object[this.var] = this.from + t * MinAngleBetween(this.from, this.to);
+        } else {
+          this.object[this.var] = this.from + t * (this.to - this.from);
+        }
       }
 
       // check complete

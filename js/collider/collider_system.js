@@ -51,9 +51,20 @@ class ColliderSystem {
     return res;
   }
 
+  remove(obj) {
+    const index = this.meshes.findIndex(m => m.id === obj.uuid);
+    if (index !== -1) {
+      this.meshes.splice(index, 1);
+      this.clearCache();
+      console.log('[ColliderSystem] Removed object: ' + obj.uuid);
+    } else {
+      console.log('[ColliderSystem] Remove failed. Could not find object: ' + obj.uuid);
+    }
+  }
+
   clear() {
     this.meshes = [];
-    this.cache = [];
+    this.clearCache();
   }
 
   getCollisions(point) {
@@ -89,6 +100,10 @@ class ColliderSystem {
         this.cache.push(this.meshes[i]);
       }
     }
+  }
+
+  clearCache() {
+    this.cache = [];
   }
 }
 

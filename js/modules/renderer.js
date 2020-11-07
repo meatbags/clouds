@@ -6,9 +6,7 @@ class Renderer {
   constructor() {
     this.renderer = new THREE.WebGLRenderer({antialias: true});
     this.renderer.outputEncoding = THREE.GammaEncoding;
-    this.renderer.gammaInput = true;
-    this.renderer.gammaOutput = true;
-    this.renderer.gammaFactor = 2.0;
+    this.renderer.gammaFactor = 2.2;
     this.renderer.setClearColor(0xececfc, 1);
 
     // add to doc

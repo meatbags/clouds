@@ -99,7 +99,7 @@ class Scene {
               applyToMeshes(obj, mesh => { mesh.position.add(offset); });
             }
           });
-
+          
           // update object
           this.ref.materials.processObject(obj);
           this.ref.geometry.processObject(obj);

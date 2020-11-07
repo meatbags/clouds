@@ -12,7 +12,7 @@ class Mesh {
     if (!object.geometry.isBufferGeometry) {
       throw('Error: THREE.BufferGeometry not found');
     }
-
+    
     this.id = object.uuid;
     this.isColliderMesh = true;
     this.enabled = true;

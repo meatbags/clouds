@@ -8,6 +8,7 @@ class ChessPuzzle {
   constructor(root) {
     this.ref = {};
     this.ref.scene = root.ref.scene;
+    this.ref.colliderSystem = root.ref.scene.getColliderSystem();
     this.ref.camera = root.ref.camera;
     this.ref.cameraCamera = root.ref.camera.getCamera();
     this.ref.controls = root.ref.controls;
@@ -21,6 +22,7 @@ class ChessPuzzle {
     this.inspectThreshold = 5;
     this.maxDistance = 10;
     this.active = true;
+    this.hover = false;
     this.solved = false;
 
     // init
@@ -55,6 +57,91 @@ class ChessPuzzle {
 
     // get door mesh
     this.door = scene.getObjectByName('sculptors_door');
+
+    // add door blocker
+    const wireMat = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
+    this.block = new THREE.Mesh(new THREE.BoxBufferGeometry(3, 4, 1), wireMat);
+    this.block.position.set(off.x, off.y, off.z + 5.5);
+    this.ref.scene.getScene().add(this.block);
+    this.ref.colliderSystem.add(this.block);
+  }
+
+  checkSolution(indices) {
+    // check
+    let res = true;
+    [6, 13, 22, 42, 52].forEach(index => {
+      if (!indices.includes(index)) {
+        res = false;
+      }
+    });
+
+    // fail
+    if (!res) {
+      this.active = false;
+      indices.forEach(index => {
+        this.grid.children[index].userData.active = false;
+        this.grid.children[index].material.color.setHex(0xff4040);
+      });
+      setTimeout(() => {
+        indices.forEach(index => {
+          this.grid.children[index].material.color.setHex(0xffffff);
+        });
+        setTimeout(() => {
+          indices.forEach(index => {
+            this.grid.children[index].material.color.setHex(0x808080);
+          });
+          this.active = true;
+        }, 125);
+      }, 1000);
+
+    // success
+    } else {
+      this.active = false;
+      this.solved = true;
+      indices.forEach(index => {
+        this.grid.children[index].userData.active = false;
+        this.grid.children[index].material.color.setHex(0x40ff40);
+      });
+
+      setTimeout(() => {
+        indices.forEach(index => {
+          this.grid.children[index].material.color.setHex(0xffffff);
+        });
+        setTimeout(() => {
+          indices.forEach(index => {
+            this.grid.children[index].material.color.setHex(0x808080);
+          });
+          setTimeout(() => {
+            // move door
+            const doorTo = this.door.position.clone();
+            doorTo.x += -3.129;
+            this.ref.animationHandler.add({
+              duration: 2,
+              object: this.door,
+              var: 'position',
+              from: this.door.position.clone(),
+              to: doorTo,
+            });
+
+            // move grid
+            const gridTo = this.grid.position.clone();
+            gridTo.x += -3.129;
+            this.ref.animationHandler.add({
+              duration: 2,
+              object: this.grid,
+              var: 'position',
+              from: this.grid.position.clone(),
+              to: gridTo,
+              callback: () => { console.log('[ChessPuzzle] Puzzle solved'); },
+            });
+
+            // remove block
+            this.ref.scene.getScene().remove(this.block);
+            this.ref.colliderSystem.remove(this.block);
+          }, 500);
+        }, 125);
+      }, 1000);
+    }
   }
 
   onButton(button) {
@@ -70,62 +157,37 @@ class ChessPuzzle {
 
     // check solution
     if (indices.length >= 5) {
-      let res = true;
-      [6, 13, 22, 42, 52].forEach(index => {
-        if (!indices.includes(index)) {
-          res = false;
+      this.checkSolution(indices);
+    }
+  }
+
+  onHover(button) {
+    this.hover = true;
+    if (!button.userData.hover) {
+      this.grid.children.forEach(child => {
+        if (child.userData.hover) {
+          child.userData.hover = false;
+          if (!child.userData.active) {
+            child.material.color.setHex(0x808080);
+          }
         }
       });
-
-      // fail
-      if (!res) {
-        this.active = false;
-        indices.forEach(index => {
-          this.grid.children[index].userData.active = false;
-          this.grid.children[index].material.color.setHex(0xff4040);
-        });
-        setTimeout(() => {
-          indices.forEach(index => {
-            this.grid.children[index].material.color.setHex(0x808080);
-          });
-          this.active = true;
-        }, 1000);
-
-      // success
-      } else {
-        this.active = false;
-        this.solved = true;
-        indices.forEach(index => {
-          this.grid.children[index].userData.active = false;
-          this.grid.children[index].material.color.setHex(0x40ff40);
-        });
-
-        setTimeout(() => {
-          // move door
-          const doorTo = this.door.position.clone();
-          doorTo.x += -3.129;
-          this.ref.animationHandler.add({
-            duration: 2,
-            object: this.door,
-            var: 'position',
-            from: this.door.position.clone(),
-            to: doorTo,
-          });
-
-          // move grid
-          const gridTo = this.grid.position.clone();
-          gridTo.x += -3.129;
-          this.ref.animationHandler.add({
-            duration: 2,
-            object: this.grid,
-            var: 'position',
-            from: this.grid.position.clone(),
-            to: gridTo,
-            callback: () => { console.log('[ChessPuzzle] Puzzle solved'); },
-          });
-        }, 1000);
+      button.userData.hover = true;
+      if (!button.userData.active) {
+        button.material.color.setHex(0xa0a0a0);
       }
     }
+  }
+
+  onMouseLeave() {
+    this.grid.children.forEach(child => {
+      if (child.userData.hover) {
+        child.userData.hover = false;
+        if (!child.userData.active) {
+          child.material.color.setHex(0x808080);
+        }
+      }
+    });
   }
 
   onMouseMove(x, y) {
@@ -135,10 +197,15 @@ class ChessPuzzle {
       if (intersects.length) {
         if (this.ref.cameraCamera.position.distanceTo(this.grid.position) >= this.inspectThreshold) {
           this.ref.domTarget.dataset.cursor = 'zoom-in';
+          this.onMouseLeave();
         } else {
           this.ref.domTarget.dataset.cursor = 'pointer';
+          this.onHover(intersects[0].object);
         }
         res = true;
+      }
+      if (!res && this.hover) {
+        this.onMouseLeave();
       }
     }
     return res;
@@ -176,6 +243,7 @@ class ChessPuzzle {
       var: 'pitch',
       to: 0,
       easing: 'ease-in-and-out',
+      isAngle: true,
     });
     this.ref.animationHandler.add({
       duration: dur,
@@ -183,6 +251,7 @@ class ChessPuzzle {
       var: 'yaw',
       to: Math.PI,
       easing: 'ease-in-and-out',
+      isAngle: true,
     });
   }
 
