@@ -135,11 +135,12 @@ html, body {
 body {
   width: 100%;
   height: 100vh;
-  font-family: "PlayfairDisplay", serif;
+  font-family: "Karla", sans-serif;
   font-size: 18px;
   letter-spacing: 1px;
   line-height: 1.25;
-  color: #fff; }
+  color: #fff;
+  overflow: hidden; }
 
 .wrapper {
   width: 100%;
@@ -150,6 +151,7 @@ body {
   .wrapper .wrapper__inner {
     cursor: crosshair;
     position: relative;
+    user-select: none;
     width: 100%;
     height: 100%; }
     .wrapper .wrapper__inner .wrapper__title {
@@ -161,6 +163,29 @@ body {
       top: 0;
       left: 0;
       z-index: 2; }
+    .wrapper .wrapper__inner .wrapper__info {
+      margin-left: 16px;
+      margin-right: 16px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      padding-left: 2px;
+      padding-right: 2px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      z-index: 2;
+      border: 1px solid #fff;
+      border-radius: 100%;
+      cursor: pointer;
+      line-height: 1;
+      font-size: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
 
 .canvas-wrapper {
   position: absolute;
@@ -185,4 +210,87 @@ body {
       pointer-events: none; }
     .canvas-wrapper canvas.clickable {
       cursor: pointer; }
+
+.popup-window {
+  position: fixed;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  max-width: 400px;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #101010;
+  box-shadow: 4px 4px 8px rgba(16, 16, 16, 0.25);
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 8px));
+  pointer-events: none;
+  transition: 0.35s; }
+  .popup-window.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%); }
+  .popup-window .popup-window__header {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: relative;
+    font-size: 15px;
+    width: 100%;
+    background: #101010;
+    color: #fff;
+    line-height: 1; }
+    .popup-window .popup-window__header .popup-window__label {
+      text-transform: uppercase; }
+    .popup-window .popup-window__header .popup-window__close {
+      padding-left: 3.6px;
+      padding-right: 3.6px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+      height: 100%;
+      width: 24px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start; }
+  .popup-window .popup-window__body {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px; }
+    .popup-window .popup-window__body .popup-window__content {
+      padding-left: 0px;
+      padding-right: 0px;
+      padding-top: 4px;
+      padding-bottom: 4px; }
+    .popup-window .popup-window__body .popup-window__buttons {
+      padding-left: 0px;
+      padding-right: 0px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-end; }
+      .popup-window .popup-window__body .popup-window__buttons .button {
+        padding-left: 6px;
+        padding-right: 6px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        border: 1px solid #101010;
+        cursor: pointer;
+        font-weight: bold;
+        min-width: 50px;
+        text-align: center;
+        line-height: 1; }
+        .popup-window .popup-window__body .popup-window__buttons .button:active {
+          background: #101010;
+          color: #fff; }
 

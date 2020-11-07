@@ -11,6 +11,7 @@ import Geometry from './modules/geometry';
 import PuzzleHandler from './game/puzzle_handler';
 import PortalHandler from './game/portal_handler';
 import AnimationHandler from './game/animation_handler';
+import UserInterface from './ui/user_interface';
 
 class App {
   constructor() {
@@ -26,6 +27,7 @@ class App {
       portalHandler: new PortalHandler(),
       puzzleHandler: new PuzzleHandler(),
       animationHandler: new AnimationHandler(),
+      userInterface: new UserInterface(),
     };
 
     // bind modules
