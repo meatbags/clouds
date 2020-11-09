@@ -12,8 +12,8 @@ const Config = {
     speed: 3,
     speedShift: 6,
     speedNoclip: 30,
-    maxPitch: Math.PI / 8,
-    minPitch: -Math.PI / 8,
+    maxPitch: Math.PI / 6,
+    minPitch: -Math.PI / 6,
   },
   Scene: {
     cloudComplexity: 2,
